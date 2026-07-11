@@ -29,6 +29,45 @@
     --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ============ THEMES — accent + tint sets ============ */
+  html[data-theme="crimson"] { --teal: #FF5C64; --teal-deep: #6B1F26; --teal-dim: #301114; --bg: #100A0C; --frame: #170F12; --panel: #1C1216; --panel-2: #241820; }
+  html[data-theme="amber"]   { --teal: #F2A93B; --teal-deep: #6B4A12; --teal-dim: #33230A; --bg: #0F0C07; --frame: #16110A; --panel: #1C160D; --panel-2: #241C11; }
+  html[data-theme="violet"]  { --teal: #A78BFA; --teal-deep: #45318C; --teal-dim: #221636; --bg: #0C0A14; --frame: #120F1C; --panel: #171326; --panel-2: #1E1930; }
+  html[data-theme="arctic"]  { --teal: #58A6FF; --teal-deep: #1D4E86; --teal-dim: #0F2540; --bg: #090E16; --frame: #0E141F; --panel: #121A28; --panel-2: #182233; }
+
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 2px; }
+  .swatch {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px; color: var(--text-2);
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 99px; padding: 7px 13px 7px 8px; cursor: pointer;
+    transition: all .13s ease;
+  }
+  .swatch:hover { border-color: var(--line-strong); color: var(--text); }
+  .swatch.active { border-color: var(--teal-deep); color: var(--teal); background: var(--teal-dim); }
+  .swatch:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .swatch i { width: 15px; height: 15px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,.15); }
+
+  /* ---- Vault: saved links ---- */
+  .vault-add { display: flex; flex-direction: column; gap: 7px; }
+  .vault-item .v-url {
+    font-family: var(--mono); font-size: 10px; color: var(--teal);
+    word-break: break-all; margin-top: 3px;
+  }
+  .vault-item .v-acts { display: flex; gap: 6px; margin-top: 9px; }
+  .r-save {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-3); flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 7px;
+    display: grid; place-items: center;
+    transition: color .13s ease, background .13s ease;
+  }
+  .r-save:hover { color: var(--teal); background: var(--teal-dim); }
+  .r-save:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+  .r-save svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+  .r-save.saved { color: var(--teal); }
+  .r-save.saved svg { fill: var(--teal); }
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
@@ -38,8 +77,380 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 28px 16px 60px;
+    padding: 28px 16px 130px;
   }
+
+  /* ============ WINDOWS-STYLE TASKBAR ============ */
+  .taskbar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    height: 54px; z-index: 50;
+    display: flex; align-items: center;
+    padding: 0 14px;
+    background: rgba(13, 17, 23, .92);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+  }
+  .tb-center {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 5px;
+    max-width: calc(100vw - 210px);
+  }
+  .tb-app {
+    position: relative;
+    width: 42px; height: 42px; border-radius: 9px;
+    display: grid; place-items: center;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--text-2); flex-shrink: 0;
+    transition: background .13s ease, color .13s ease, transform .1s ease;
+  }
+  .tb-app:hover { background: var(--panel-2); color: var(--text); transform: translateY(-1px); }
+  .tb-app:active { transform: translateY(0) scale(.96); }
+  .tb-app:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+  .tb-app svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .tb-app.start { color: var(--teal); }
+  .tb-app.start:hover { background: var(--teal-dim); }
+  .tb-app::after {
+    content: ""; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 3px; border-radius: 99px; background: var(--text-3);
+    transition: width .15s ease, background .15s ease;
+  }
+  .tb-app.running::after { width: 7px; }
+  .tb-app.active-app::after { width: 17px; background: var(--teal); }
+  .tb-sep { width: 1px; height: 26px; background: var(--line); margin: 0 6px; flex-shrink: 0; }
+  .tb-search {
+    display: flex; align-items: center; gap: 8px;
+    height: 38px; padding: 0 14px; margin-left: 2px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 99px; cursor: pointer;
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-3);
+    transition: border-color .13s ease, color .13s ease;
+    white-space: nowrap;
+  }
+  .tb-search:hover { border-color: var(--teal-deep); color: var(--text-2); }
+  .tb-search svg { width: 14px; height: 14px; stroke: var(--teal); stroke-width: 1.7; fill: none; flex-shrink: 0; }
+  .tb-tray {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .tray-btn {
+    height: 40px; border-radius: 8px; border: none; cursor: pointer;
+    background: transparent; color: var(--text-2);
+    display: flex; align-items: center; gap: 7px; padding: 0 9px;
+    font-family: var(--mono); font-size: 10.5px;
+    transition: background .13s ease, color .13s ease;
+  }
+  .tray-btn:hover { background: var(--panel-2); color: var(--text); }
+  .tray-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+  .tray-btn svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .tray-btn.shield { color: var(--teal); }
+  .tray-btn.cloak-on { color: var(--teal); }
+  .tb-clock { text-align: right; line-height: 1.35; color: var(--text-2); font-family: var(--mono); font-size: 10.5px; padding: 0 6px 0 9px; }
+  @media (max-width: 860px) {
+    .tb-search span { display: none; }
+    .tb-tray .tray-label { display: none; }
+  }
+  @media (max-width: 640px) {
+    .tb-center { position: static; transform: none; margin: 0 auto; }
+    .tb-tray { margin-left: 0; }
+    .tb-clock { display: none; }
+  }
+
+  /* ---- Start menu ---- */
+  .startmenu {
+    position: fixed; left: 50%; bottom: 66px; z-index: 51;
+    transform: translateX(-50%) translateY(12px);
+    width: min(430px, calc(100vw - 24px));
+    background: var(--frame);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    padding: 18px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .startmenu.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .sm-label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+  .sm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  @media (max-width: 420px) { .sm-grid { grid-template-columns: repeat(3, 1fr); } }
+  .sm-app {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 13px 4px 11px; border-radius: 10px;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--text-2); font-family: var(--mono); font-size: 10px;
+    transition: background .13s ease, color .13s ease;
+  }
+  .sm-app:hover { background: var(--panel-2); color: var(--text); }
+  .sm-app:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+  .sm-app .ic {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--panel); border: 1px solid var(--line);
+    display: grid; place-items: center;
+  }
+  .sm-app .ic svg { width: 18px; height: 18px; stroke: var(--teal); stroke-width: 1.6; fill: none; }
+  .sm-foot {
+    margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-3);
+  }
+
+  /* ---- Mini app windows (terminal, threat map) ---- */
+  .miniwin {
+    position: fixed; bottom: 66px; z-index: 49;
+    width: min(470px, calc(100vw - 24px));
+    background: var(--frame);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.6);
+    overflow: hidden;
+    display: none;
+    animation: rise .2s ease;
+  }
+  .miniwin.open { display: block; }
+  .miniwin.mw-left { left: max(12px, calc(50% - 490px)); }
+  .miniwin.mw-right { right: max(12px, calc(50% - 490px)); }
+  @media (max-width: 1000px) {
+    .miniwin.mw-left { left: 12px; }
+    .miniwin.mw-right { right: 12px; }
+  }
+  .mw-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 13px; background: #0D1117;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--text-2);
+  }
+  .mw-head .x {
+    background: none; border: none; cursor: pointer; color: var(--text-3);
+    width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center;
+  }
+  .mw-head .x:hover { background: var(--panel-2); color: var(--text); }
+  .mw-head .x svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+
+  .term-body {
+    height: 250px; overflow-y: auto;
+    padding: 13px 14px;
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.7;
+    color: var(--text-2);
+  }
+  .term-body .t-ok { color: var(--teal); }
+  .term-body .t-bad { color: var(--red); }
+  .term-body .t-warn { color: var(--amber); }
+  .term-body .t-dim { color: var(--text-3); }
+  .term-in {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px;
+  }
+  .term-in .ps { color: var(--teal); flex-shrink: 0; }
+  .term-in input {
+    flex: 1; background: none; border: none; outline: none;
+    color: var(--text); font-family: var(--mono); font-size: 11.5px;
+  }
+
+  .map-body { position: relative; height: 250px; background:
+    radial-gradient(ellipse 90% 80% at 50% 45%, rgba(47,214,160,.05), transparent),
+    linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 100% 100%, 26px 26px, 26px 26px;
+  }
+  .atk {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .atk::after {
+    content: ""; position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid currentColor; opacity: .5;
+    animation: ping 1.8s ease-out infinite;
+  }
+  @keyframes ping { 0% { transform: scale(.4); opacity: .7; } 100% { transform: scale(1.8); opacity: 0; } }
+  .atk.a-crit { background: var(--red); color: var(--red); }
+  .atk.a-high { background: var(--amber); color: var(--amber); }
+  .atk.a-scan { background: var(--blue); color: var(--blue); }
+  .map-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 10px 14px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-3);
+    flex-wrap: wrap;
+  }
+  .map-foot .leg { display: flex; gap: 12px; }
+  .map-foot .leg span { display: flex; align-items: center; gap: 5px; }
+  .map-foot .leg i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+  /* ---- Advanced window chrome: drag, minimize, focus ---- */
+  .miniwin { transition: box-shadow .15s ease; }
+  .miniwin.focused { box-shadow: 0 28px 90px rgba(0,0,0,.75), 0 0 0 1px var(--teal-deep); }
+  .mw-head { cursor: grab; user-select: none; }
+  .mw-head:active { cursor: grabbing; }
+  .mw-head .mw-btns { display: flex; gap: 2px; }
+
+  /* ---- NetMon ---- */
+  .net-body { height: 250px; overflow-y: auto; font-family: var(--mono); font-size: 10.5px; }
+  .net-row {
+    display: grid; grid-template-columns: 1fr 52px 84px;
+    gap: 8px; padding: 7px 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-2); align-items: center;
+    animation: rise .2s ease;
+  }
+  .net-row .n-d { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .net-row .n-p { color: var(--text-3); }
+  .net-row .n-s { text-align: right; }
+  .net-row .n-s.allow { color: var(--teal); }
+  .net-row .n-s.block { color: var(--red); }
+  .net-row .n-s.sand { color: var(--blue); }
+  .net-foot {
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    padding: 10px 14px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-3);
+  }
+  .net-foot b { color: var(--red); font-weight: 500; }
+
+  /* ---- Hash Lab ---- */
+  .lab-body { padding: 13px 14px; }
+  .lab-body textarea {
+    width: 100%; height: 58px; resize: vertical;
+    background: var(--panel); border: 1px solid var(--line-strong);
+    border-radius: 8px; padding: 9px 11px;
+    color: var(--text); font-family: var(--mono); font-size: 11.5px; outline: none;
+  }
+  .lab-body textarea:focus { border-color: var(--teal-deep); }
+  .lab-ops { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .lab-out {
+    margin-top: 10px; padding: 10px 12px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-2);
+    line-height: 1.6; word-break: break-all; white-space: pre-wrap;
+    max-height: 120px; overflow-y: auto;
+  }
+  .lab-out .t-ok { color: var(--teal); }
+  .lab-out .t-bad { color: var(--red); }
+
+  /* ---- Notifications ---- */
+  #toasts {
+    position: fixed; right: 14px; bottom: 66px; z-index: 60;
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+    pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto; cursor: pointer;
+    width: min(330px, calc(100vw - 28px));
+    background: var(--frame);
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--teal);
+    border-radius: 10px; padding: 12px 14px;
+    box-shadow: 0 14px 50px rgba(0,0,0,.55);
+    animation: toast-in .22s ease;
+  }
+  .toast.sev-crit { border-left-color: var(--red); }
+  .toast.sev-high { border-left-color: var(--amber); }
+  .toast h5 { font-size: 12.5px; font-weight: 500; color: var(--text); display: flex; justify-content: space-between; gap: 10px; }
+  .toast h5 small { font-family: var(--mono); font-size: 9px; color: var(--text-3); letter-spacing: .06em; flex-shrink: 0; }
+  .toast p { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); margin-top: 4px; line-height: 1.5; }
+  @keyframes toast-in { from { opacity: 0; transform: translateX(16px); } }
+  .toast.out { opacity: 0; transform: translateX(16px); transition: all .25s ease; }
+
+  .notifcenter {
+    position: fixed; right: 12px; bottom: 66px; z-index: 55;
+    width: min(340px, calc(100vw - 24px));
+    max-height: min(430px, 70vh);
+    display: none; flex-direction: column;
+    background: var(--frame);
+    border: 1px solid var(--line-strong); border-radius: 14px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    overflow: hidden;
+  }
+  .notifcenter.open { display: flex; animation: rise .18s ease; }
+  .nc-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 15px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-2);
+  }
+  .nc-head button { background: none; border: none; color: var(--text-3); font-family: var(--mono); font-size: 10.5px; cursor: pointer; }
+  .nc-head button:hover { color: var(--teal); }
+  .nc-body { overflow-y: auto; padding: 8px 10px 12px; }
+  .nc-item {
+    padding: 10px 8px; border-bottom: 1px solid var(--line); cursor: pointer;
+    border-radius: 8px;
+  }
+  .nc-item:hover { background: var(--panel); }
+  .nc-item:last-child { border-bottom: none; }
+  .nc-item h6 { font-size: 12px; font-weight: 500; color: var(--text); }
+  .nc-item p { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 3px; line-height: 1.5; }
+  .nc-empty { padding: 26px 10px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .tray-btn .rb {
+    min-width: 13px; height: 13px; border-radius: 7px; padding: 0 3px;
+    background: var(--red); color: #fff;
+    font-family: var(--mono); font-size: 8.5px;
+    display: grid; place-items: center;
+  }
+
+  /* ---- Command palette ---- */
+  .palette {
+    position: fixed; inset: 0; z-index: 70;
+    display: none; align-items: flex-start; justify-content: center;
+    padding-top: 14vh;
+    background: rgba(5, 8, 12, .6);
+    backdrop-filter: blur(3px);
+  }
+  .palette.open { display: flex; }
+  .pal-box {
+    width: min(560px, calc(100vw - 28px));
+    background: var(--frame);
+    border: 1px solid var(--line-strong); border-radius: 14px;
+    box-shadow: 0 30px 100px rgba(0,0,0,.7);
+    overflow: hidden;
+    animation: rise .16s ease;
+  }
+  .pal-box input {
+    width: 100%; background: none; border: none; outline: none;
+    padding: 16px 18px; color: var(--text);
+    font-family: var(--mono); font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pal-list { max-height: 320px; overflow-y: auto; padding: 7px; }
+  .pal-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    width: 100%; text-align: left;
+    padding: 11px 12px; border-radius: 9px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-2); font-size: 13px;
+  }
+  .pal-item .hint { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .pal-item:hover, .pal-item.sel { background: var(--teal-dim); color: var(--teal); }
+  .pal-foot {
+    padding: 9px 16px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px; color: var(--text-3);
+    display: flex; gap: 14px;
+  }
+
+  /* ---- ScopeShell: advanced terminal, left of taskbar ---- */
+  .tb-left { display: flex; align-items: center; flex-shrink: 0; }
+  .tb-shell {
+    display: flex; align-items: center; gap: 9px;
+    height: 38px; padding: 0 15px;
+    background: var(--teal-dim);
+    border: 1px solid var(--teal-deep);
+    border-radius: 99px; cursor: pointer;
+    font-family: var(--mono); font-size: 11.5px; color: var(--teal);
+    transition: background .13s ease, transform .1s ease;
+    white-space: nowrap;
+  }
+  .tb-shell:hover { background: #17402F; transform: translateY(-1px); }
+  .tb-shell:active { transform: translateY(0) scale(.97); }
+  .tb-shell:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .tb-shell .cursor-sq {
+    display: inline-block; width: 7px; height: 12px;
+    background: var(--teal); animation: blink 1.1s steps(1) infinite;
+  }
+  .tb-shell.running { box-shadow: 0 0 0 1px var(--teal-deep); }
+  @media (max-width: 860px) { .tb-shell span.lbl { display: none; } }
+
+  #mw-scopeshell { width: min(620px, calc(100vw - 24px)); }
+  #mw-scopeshell .term-body { height: 330px; font-size: 11px; }
+  .term-body .t-hd { color: var(--teal); letter-spacing: .06em; }
+  .term-body .cmd-row { display: grid; grid-template-columns: 200px 1fr; gap: 10px; }
+  .term-body .cmd-row .cn { color: var(--teal); }
+  .term-body .cmd-row .cd { color: var(--text-3); }
+  @media (max-width: 560px) { .term-body .cmd-row { grid-template-columns: 1fr; gap: 0; } .term-body .cmd-row .cd { padding-left: 12px; } }
+  .term-body pre { font-family: var(--mono); color: var(--teal); line-height: 1.35; font-size: 10px; margin: 4px 0; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -138,6 +549,139 @@
 
   /* ============ PAGE BODY ============ */
   .win-body { background: var(--bg); }
+
+  /* ============ EXTENSION RAIL (Opera-style sidebar) ============ */
+  .workspace { display: flex; align-items: stretch; }
+  .content { flex: 1; min-width: 0; }
+  .rail {
+    width: 54px; flex-shrink: 0;
+    background: #0D1117;
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 12px 0 10px; gap: 4px;
+    position: sticky; top: 0; max-height: 100vh;
+    z-index: 6;
+  }
+  .rail .spacer { flex: 1; }
+  .rail-sep { width: 26px; height: 1px; background: var(--line); margin: 6px 0; flex-shrink: 0; }
+  .rail-btn {
+    position: relative;
+    width: 38px; height: 38px; border-radius: 9px;
+    display: grid; place-items: center;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--text-3); flex-shrink: 0;
+    transition: background .13s ease, color .13s ease;
+  }
+  .rail-btn:hover { background: var(--panel-2); color: var(--text); }
+  .rail-btn.active { background: var(--teal-dim); color: var(--teal); }
+  .rail-btn.cloaked { color: var(--teal); }
+  .rail-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+  .rail-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .rail-btn .rb {
+    position: absolute; top: 3px; right: 3px;
+    min-width: 14px; height: 14px; border-radius: 7px; padding: 0 3px;
+    background: var(--red); color: #fff;
+    font-family: var(--mono); font-size: 9px;
+    display: grid; place-items: center;
+  }
+
+  .panel {
+    width: 0; flex-shrink: 0; overflow: hidden;
+    background: var(--frame);
+    border-right: 1px solid transparent;
+    position: sticky; top: 0; max-height: 100vh;
+    transition: width .22s ease;
+    z-index: 5;
+  }
+  .panel.open { width: 336px; border-right-color: var(--line); }
+  .panel-inner { width: 336px; height: 100%; display: flex; flex-direction: column; }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--text-2);
+    flex-shrink: 0;
+  }
+  .panel-head .x {
+    background: none; border: none; color: var(--text-3); cursor: pointer;
+    width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
+  }
+  .panel-head .x:hover { background: var(--panel-2); color: var(--text); }
+  .panel-head .x svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .panel-body { overflow-y: auto; padding: 15px 16px 22px; flex: 1; }
+  @media (max-width: 700px) {
+    .panel.open { width: min(300px, 80vw); }
+    .panel-inner { width: min(300px, 80vw); }
+  }
+
+  /* ---- Panel building blocks ---- */
+  .p-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text-3);
+    margin: 16px 0 9px;
+  }
+  .p-label:first-child { margin-top: 0; }
+  .p-item {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 13px; margin-bottom: 8px;
+    transition: border-color .13s ease;
+  }
+  .p-item:hover { border-color: var(--line-strong); }
+  .p-item h4 { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .p-sub { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); line-height: 1.55; }
+  .p-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .progress { height: 4px; background: var(--line); border-radius: 99px; margin-top: 10px; overflow: hidden; }
+  .progress i { display: block; height: 100%; background: var(--teal); border-radius: 99px; }
+  .p-btn {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--teal); background: var(--teal-dim);
+    border: 1px solid var(--teal-deep); border-radius: 7px;
+    padding: 6px 11px; cursor: pointer; white-space: nowrap;
+    transition: background .13s ease;
+  }
+  .p-btn:hover { background: #17402F; }
+  .p-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .p-btn.ghost { background: transparent; color: var(--text-2); border-color: var(--line); }
+  .p-btn.ghost:hover { border-color: var(--line-strong); color: var(--text); }
+  .p-input {
+    width: 100%; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 9px 11px; color: var(--text);
+    font-family: var(--mono); font-size: 12px; outline: none;
+  }
+  .p-input:focus { border-color: var(--teal-deep); box-shadow: 0 0 0 3px rgba(47,214,160,.1); }
+  .p-note { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 9px; line-height: 1.5; }
+  .feed-row {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 2px; border-bottom: 1px solid var(--line);
+  }
+  .feed-row:last-child { border-bottom: none; }
+  .feed-row .v-dot { margin-top: 4px; }
+  .feed-row .f-t { font-size: 12px; color: var(--text); line-height: 1.45; }
+  .feed-row .f-m { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 3px; }
+  .scan-card {
+    margin-top: 12px; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  }
+  .tg {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 2px; border-bottom: 1px solid var(--line);
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .tg:last-child { border-bottom: none; }
+  .tg small { display: block; font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 3px; }
+  .tg-sw {
+    width: 34px; height: 19px; border-radius: 99px; flex-shrink: 0;
+    background: var(--line-strong); border: none; position: relative; cursor: pointer;
+    transition: background .15s ease;
+  }
+  .tg-sw::after {
+    content: ""; position: absolute; top: 2.5px; left: 3px;
+    width: 14px; height: 14px; border-radius: 50%; background: #8B98A9;
+    transition: left .15s ease, background .15s ease;
+  }
+  .tg-sw.on { background: var(--teal-deep); }
+  .tg-sw.on::after { left: 17px; background: var(--teal); }
+  .tg-sw:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
   /* ---- Hero: the search engine ---- */
   .hero {
@@ -325,6 +869,58 @@
   .feat h3 { font-family: var(--display); font-size: 15.5px; font-weight: 500; margin-bottom: 7px; }
   .feat p { font-size: 13px; line-height: 1.65; color: var(--text-2); }
 
+  /* ---- Mailscope email extension demo ---- */
+  .mail-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .mail-tab {
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--text-2); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 99px;
+    padding: 6px 14px; cursor: pointer;
+    transition: all .13s ease;
+  }
+  .mail-tab:hover, .mail-tab.active {
+    color: var(--teal); border-color: var(--teal-deep); background: var(--teal-dim);
+  }
+  .mail-tab:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .mailcard {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: var(--mono);
+  }
+  .mailcard .m-head {
+    padding: 15px 18px 13px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .m-head .m-from { font-size: 12px; color: var(--text); word-break: break-all; }
+  .m-head .m-from .spoof { color: var(--red); text-decoration: underline dotted; }
+  .m-head .m-subj { font-size: 12.5px; color: var(--text-2); margin-top: 6px; }
+  .m-verdict { padding: 6px 0; }
+  .v-row {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 18px;
+    font-size: 11.5px; color: var(--text-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .v-row:last-child { border-bottom: none; }
+  .v-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .v-dot.ok   { background: var(--teal); }
+  .v-dot.bad  { background: var(--red); }
+  .v-dot.warn { background: var(--amber); }
+  .v-dot.info { background: var(--blue); }
+  .v-row .v-label { color: var(--text-3); width: 118px; flex-shrink: 0; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; }
+  .v-row .v-val { line-height: 1.5; }
+  .m-stamp {
+    margin: 14px 18px 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: .08em;
+    border-radius: 6px; padding: 7px 13px;
+  }
+  .m-stamp.quarantine { color: #FF9599; background: #3A1114; border: 1px solid #5A1B20; }
+  .m-stamp.clean { color: #7BE8C3; background: var(--teal-dim); border: 1px solid var(--teal-deep); }
+
   .thesis-list { margin-top: 34px; display: flex; flex-direction: column; gap: 12px; }
   .thesis {
     display: grid; grid-template-columns: 64px 1fr; gap: 18px;
@@ -373,7 +969,7 @@
 
   /* ---- Restore chip when closed/minimized ---- */
   .restore {
-    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(80px);
+    position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(80px);
     display: flex; align-items: center; gap: 10px;
     background: var(--panel); border: 1px solid var(--line-strong);
     border-radius: 99px; padding: 10px 18px;
@@ -426,6 +1022,67 @@
   </div>
 
   <div class="win-body">
+  <div class="workspace">
+
+    <!-- ============ EXTENSION RAIL ============ -->
+    <nav class="rail" aria-label="Cipherscope extensions">
+      <button class="rail-btn" data-action="home" title="Home" aria-label="Home">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+      </button>
+      <div class="rail-sep"></div>
+      <button class="rail-btn" data-panel="feed" title="Live threat feed" aria-label="Live threat feed">
+        <svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.6"/></svg>
+        <span class="rb">5</span>
+      </button>
+      <button class="rail-btn" data-panel="mail" title="Mailscope — email extension" aria-label="Mailscope email extension">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+        <span class="rb">1</span>
+      </button>
+      <button class="rail-btn" data-panel="casebooks" title="Casebooks" aria-label="Casebooks">
+        <svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+      </button>
+      <button class="rail-btn" data-panel="vault" title="Vault — saved links" aria-label="Vault saved links">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+      </button>
+      <button class="rail-btn" data-panel="academy" title="Academy — courses" aria-label="Academy courses">
+        <svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg>
+      </button>
+      <div class="rail-sep"></div>
+      <button class="rail-btn" data-panel="scanner" title="IOC scanner" aria-label="IOC scanner">
+        <svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3"/><path d="M16 4h3a1 1 0 0 1 1 1v3"/><path d="M20 16v3a1 1 0 0 1-1 1h-3"/><path d="M8 20H5a1 1 0 0 1-1-1v-3"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+      </button>
+      <button class="rail-btn" data-panel="breach" title="Breach check" aria-label="Breach check">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r=".6"/></svg>
+      </button>
+      <button class="rail-btn" data-panel="sandbox" title="Sandbox sessions" aria-label="Sandbox sessions">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      </button>
+      <button class="rail-btn" data-panel="arsenal" title="Tool arsenal" aria-label="Tool arsenal">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6V21h3.4l5.7-5.7a4.5 4.5 0 0 0 5.6-6l-3 3-2.8-.7-.7-2.8 3-3z"/></svg>
+      </button>
+      <button class="rail-btn" id="btn-cloak" data-action="cloak" title="Cloak mode — encrypted relay" aria-label="Toggle cloak mode" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+      </button>
+      <div class="spacer"></div>
+      <button class="rail-btn" data-panel="settings" title="Hardening settings" aria-label="Hardening settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.5h4l.4-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.06-.4.1-.8.1-1.2z"/></svg>
+      </button>
+    </nav>
+
+    <!-- ============ SLIDE-OUT PANEL ============ -->
+    <aside class="panel" id="panel" aria-hidden="true">
+      <div class="panel-inner">
+        <div class="panel-head">
+          <span id="panel-title"></span>
+          <button class="x" id="panel-close" aria-label="Close panel">
+            <svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+          </button>
+        </div>
+        <div class="panel-body" id="panel-body"></div>
+      </div>
+    </aside>
+
+    <div class="content">
 
     <!-- ============ HERO / SEARCH ENGINE ============ -->
     <div class="hero">
@@ -488,6 +1145,7 @@
           <div class="row"><div class="cell">indexes everything</div><div class="cell good">verified sources only</div></div>
           <div class="row"><div class="cell">risky links open normally</div><div class="cell good">auto-sandboxed isolation</div></div>
           <div class="row"><div class="cell">bookmarks</div><div class="cell good">casebook investigations</div></div>
+          <div class="row"><div class="cell">email links open blind</div><div class="cell good">mailscope verdict before you click</div></div>
         </div>
       </div>
     </section>
@@ -496,8 +1154,13 @@
     <section id="features">
       <div class="inner">
         <p class="eyebrow">inside the browser</p>
-        <h2>Four things no tab of Chrome gives you.</h2>
+        <h2>Five things no tab of Chrome gives you.</h2>
         <div class="features">
+          <div class="feat">
+            <div class="f-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="5" height="18" rx="1.5"/><line x1="6.5" y1="7" x2="6.5" y2="7.01"/><line x1="6.5" y1="11" x2="6.5" y2="11.01"/><line x1="6.5" y1="15" x2="6.5" y2="15.01"/><path d="M13 6h7M13 12h7M13 18h7"/></svg></div>
+            <h3>Extension rail</h3>
+            <p>An Opera-style sidebar where security tools live one click away — threat feed, Mailscope, casebooks, academy, IOC scanner, breach check, sandbox, arsenal, cloak mode — plus a Windows-style taskbar below with pinned apps, a start menu, a sandboxed terminal and a live threat map. All running on this page.</p>
+          </div>
           <div class="feat">
             <div class="f-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></div>
             <h3>Verified search index</h3>
@@ -518,6 +1181,38 @@
             <h3>Academy on the side</h3>
             <p>Courses and daily challenges live inside the browser and react to what you read — open a heap-overflow analysis and the matching module surfaces itself. Learning becomes just-in-time.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MAILSCOPE EMAIL EXTENSION ============ -->
+    <section id="mailscope">
+      <div class="inner split">
+        <div>
+          <p class="eyebrow">the email extension</p>
+          <h2>Mailscope: the same trust engine, pointed at your inbox.</h2>
+          <p class="lede">
+            Over 90% of successful intrusions still start with an email — phishing, credential
+            harvesting, business email compromise. Mailscope is Cipherscope's browser extension for
+            webmail: it sits inside Gmail and Outlook and runs <strong>every message through the same
+            verification pipeline as the search index</strong>, before you ever click.
+          </p>
+          <p class="lede" style="margin-top: 14px;">
+            It authenticates the sender with <strong>SPF, DKIM and DMARC</strong>, checks the domain
+            against the verified-source index and known lookalike registrations, rewrites every link
+            so it <strong>detonates in the sandbox first</strong>, and detonates attachments the same
+            way. The verdict is a visible trust score on the message itself — the front door checks
+            credentials, even when the front door is your inbox. Suspicious messages get quarantined
+            with a one-click report that drops straight into a casebook, so a phish targeting your
+            org becomes an investigation, not an incident.
+          </p>
+        </div>
+        <div>
+          <div class="mail-tabs" role="group" aria-label="Email scan examples">
+            <button class="mail-tab active" data-mail="phish">suspicious email</button>
+            <button class="mail-tab" data-mail="clean">clean email</button>
+          </div>
+          <div class="mailcard" id="mailcard" aria-live="polite"></div>
         </div>
       </div>
     </section>
@@ -580,7 +1275,7 @@
             <div class="ph">phase 01</div>
             <div>
               <h3>Validate the search engine</h3>
-              <p>Ship the curated index as a web app and new-tab extension — no browser switch required. If people come back weekly for structured CVE answers, the core bet is proven.</p>
+              <p>Ship the curated index as a web app and new-tab extension — no browser switch required. Mailscope ships in the same bundle: because it's an extension, email protection lands in phase one, and every phish it catches proves the trust engine on the attack surface where most breaches begin.</p>
             </div>
           </div>
           <div class="step">
@@ -605,6 +1300,8 @@
       <span>cipherscope — concept build · index.html</span>
       <span class="status"><span class="pulse"></span> session auto-wipes in 4h 00m</span>
     </footer>
+    </div><!-- /content -->
+  </div><!-- /workspace -->
   </div>
 </div>
 
@@ -612,6 +1309,202 @@
   <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" stroke-width="2.5"/></svg></span>
   <span id="restore-label">restore cipherscope</span>
 </button>
+
+<!-- ============ START MENU ============ -->
+<div class="startmenu" id="startmenu" aria-hidden="true">
+  <div class="sm-label">cipherscope apps</div>
+  <div class="sm-grid">
+    <button class="sm-app" data-tb="browser"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="20"/><line x1="4" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="20" y2="12"/></svg></span>browser</button>
+    <button class="sm-app" data-tb="mail"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg></span>mailscope</button>
+    <button class="sm-app" data-tb="casebooks"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/></svg></span>casebooks</button>
+    <button class="sm-app" data-tb="academy"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg></span>academy</button>
+    <button class="sm-app" data-tb="scanner"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3"/><path d="M16 4h3a1 1 0 0 1 1 1v3"/><path d="M20 16v3a1 1 0 0 1-1 1h-3"/><path d="M8 20H5a1 1 0 0 1-1-1v-3"/><line x1="4" y1="12" x2="20" y2="12"/></svg></span>ioc scanner</button>
+    <button class="sm-app" data-tb="breach"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r=".6"/></svg></span>breach check</button>
+    <button class="sm-app" data-tb="terminal"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><polyline points="7 9 10 12 7 15"/><line x1="12" y1="15" x2="17" y2="15"/></svg></span>terminal</button>
+    <button class="sm-app" data-tb="threatmap"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.5 2.3 3.8 5 3.8 8S14.5 17.7 12 20c-2.5-2.3-3.8-5-3.8-8S9.5 6.3 12 4z"/></svg></span>threat map</button>
+    <button class="sm-app" data-tb="sandbox"><span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></span>sandbox</button>
+    <button class="sm-app" data-tb="feed"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.6"/></svg></span>threat feed</button>
+    <button class="sm-app" data-tb="arsenal"><span class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6V21h3.4l5.7-5.7a4.5 4.5 0 0 0 5.6-6l-3 3-2.8-.7-.7-2.8 3-3z"/></svg></span>arsenal</button>
+    <button class="sm-app" data-tb="netmon"><span class="ic"><svg viewBox="0 0 24 24"><polyline points="3 13 7 13 10 6 14 18 17 13 21 13"/></svg></span>netmon</button>
+    <button class="sm-app" data-tb="hashlab"><span class="ic"><svg viewBox="0 0 24 24"><line x1="9" y1="3" x2="7" y2="21"/><line x1="17" y1="3" x2="15" y2="21"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg></span>hash lab</button>
+    <button class="sm-app" data-tb="vault"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span>vault</button>
+    <button class="sm-app" data-tb="scopeshell"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><polyline points="6.5 9 9.5 12 6.5 15"/><line x1="11" y1="15" x2="17.5" y2="15"/><line x1="11" y1="10" x2="14" y2="10"/></svg></span>scope-shell</button>
+    <button class="sm-app" data-tb="settings"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.5h4l.4-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.06-.4.1-.8.1-1.2z"/></svg></span>settings</button>
+  </div>
+  <div class="sm-foot">
+    <span>analyst@cipherscope</span>
+    <span>ctrl+shift+p — command palette</span>
+  </div>
+</div>
+
+<!-- ============ MINI APP: TERMINAL ============ -->
+<div class="miniwin mw-left" id="mw-terminal" role="dialog" aria-label="Cipherscope terminal">
+  <div class="mw-head" data-mwdrag="terminal">
+    <span>cipherscope terminal — sandboxed</span>
+    <div class="mw-btns">
+      <button class="x" data-mwmin="terminal" aria-label="Minimize terminal"><svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+      <button class="x" data-mwclose="terminal" aria-label="Close terminal"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+    </div>
+  </div>
+  <div class="term-body" id="term-body"></div>
+  <div class="term-in">
+    <span class="ps">scope❯</span>
+    <input id="term-input" autocomplete="off" spellcheck="false" aria-label="Terminal command" placeholder="type 'help'">
+  </div>
+</div>
+
+<!-- ============ MINI APP: THREAT MAP ============ -->
+<div class="miniwin mw-right" id="mw-threatmap" role="dialog" aria-label="Live threat map">
+  <div class="mw-head" data-mwdrag="threatmap">
+    <span>global threat map — live · concept demo</span>
+    <div class="mw-btns">
+      <button class="x" data-mwmin="threatmap" aria-label="Minimize threat map"><svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+      <button class="x" data-mwclose="threatmap" aria-label="Close threat map"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+    </div>
+  </div>
+  <div class="map-body" id="map-body"></div>
+  <div class="map-foot">
+    <div class="leg">
+      <span><i style="background:var(--red)"></i> exploitation</span>
+      <span><i style="background:var(--amber)"></i> phishing</span>
+      <span><i style="background:var(--blue)"></i> scanning</span>
+    </div>
+    <span id="map-count">events observed: 0</span>
+  </div>
+</div>
+
+<!-- ============ MINI APP: NETMON ============ -->
+<div class="miniwin mw-left" id="mw-netmon" style="bottom: 336px;" role="dialog" aria-label="Network monitor">
+  <div class="mw-head" data-mwdrag="netmon">
+    <span>netmon — live connections</span>
+    <div class="mw-btns">
+      <button class="x" data-mwmin="netmon" aria-label="Minimize netmon"><svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+      <button class="x" data-mwclose="netmon" aria-label="Close netmon"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+    </div>
+  </div>
+  <div class="net-body" id="net-body"></div>
+  <div class="net-foot">
+    <span>trackers blocked: <b id="net-blocked">0</b></span>
+    <span id="net-total">connections: 0</span>
+  </div>
+</div>
+
+<!-- ============ MINI APP: HASH LAB ============ -->
+<div class="miniwin mw-right" id="mw-hashlab" style="bottom: 336px;" role="dialog" aria-label="Hash lab">
+  <div class="mw-head" data-mwdrag="hashlab">
+    <span>hash lab — analyst toolbox</span>
+    <div class="mw-btns">
+      <button class="x" data-mwmin="hashlab" aria-label="Minimize hash lab"><svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+      <button class="x" data-mwclose="hashlab" aria-label="Close hash lab"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+    </div>
+  </div>
+  <div class="lab-body">
+    <textarea id="lab-in" placeholder="paste text, base64, or a JWT… (real crypto — runs locally)" aria-label="Hash lab input"></textarea>
+    <div class="lab-ops">
+      <button class="p-btn" data-lab="sha256">sha-256</button>
+      <button class="p-btn" data-lab="sha1">sha-1</button>
+      <button class="p-btn ghost" data-lab="b64e">base64 encode</button>
+      <button class="p-btn ghost" data-lab="b64d">base64 decode</button>
+      <button class="p-btn ghost" data-lab="urld">url decode</button>
+      <button class="p-btn ghost" data-lab="jwt">decode jwt</button>
+    </div>
+    <div class="lab-out" id="lab-out">output appears here — everything runs in your browser, nothing is sent anywhere.</div>
+  </div>
+</div>
+
+<!-- ============ TOASTS + NOTIFICATION CENTER ============ -->
+<div id="toasts" aria-live="polite"></div>
+<div class="notifcenter" id="notifcenter" aria-label="Notification center">
+  <div class="nc-head">
+    <span>notifications</span>
+    <button id="nc-clear">clear all</button>
+  </div>
+  <div class="nc-body" id="nc-body"><div class="nc-empty">all quiet — nothing needs you.</div></div>
+</div>
+
+<!-- ============ COMMAND PALETTE ============ -->
+<div class="palette" id="palette" aria-hidden="true">
+  <div class="pal-box" role="dialog" aria-label="Command palette">
+    <input id="pal-input" placeholder="type a command… open, scan, cloak, wipe" autocomplete="off" aria-label="Command palette input">
+    <div class="pal-list" id="pal-list"></div>
+    <div class="pal-foot"><span>↑↓ navigate</span><span>↵ run</span><span>esc close</span></div>
+  </div>
+</div>
+
+<!-- ============ ADVANCED TERMINAL: SCOPESHELL ============ -->
+<div class="miniwin mw-left" id="mw-scopeshell" role="dialog" aria-label="ScopeShell advanced terminal">
+  <div class="mw-head" data-mwdrag="scopeshell">
+    <span>scopeshell — advanced terminal · sandboxed</span>
+    <div class="mw-btns">
+      <button class="x" data-mwmin="scopeshell" aria-label="Minimize scopeshell"><svg viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+      <button class="x" data-mwclose="scopeshell" aria-label="Close scopeshell"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+    </div>
+  </div>
+  <div class="term-body" id="shell-body"></div>
+  <div class="term-in">
+    <span class="ps">analyst@cipherscope:~$</span>
+    <input id="shell-input" autocomplete="off" spellcheck="false" aria-label="ScopeShell command" placeholder="help — or Tab to complete">
+  </div>
+</div>
+
+<!-- ============ TASKBAR ============ -->
+<div class="taskbar" role="toolbar" aria-label="Cipherscope taskbar">
+  <div class="tb-left">
+    <button class="tb-shell" id="tb-shell" data-tb="scopeshell" title="ScopeShell — advanced terminal" aria-label="Open ScopeShell advanced terminal">
+      <span class="cursor-sq" aria-hidden="true"></span>
+      <span class="lbl">scope-shell</span>
+    </button>
+  </div>
+  <div class="tb-center">
+    <button class="tb-app start" id="tb-start" title="Start" aria-label="Open start menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" stroke-width="2"/><line x1="12" y1="2" x2="12" y2="7" stroke-width="2"/><line x1="12" y1="17" x2="12" y2="22" stroke-width="2"/><line x1="2" y1="12" x2="7" y2="12" stroke-width="2"/><line x1="17" y1="12" x2="22" y2="12" stroke-width="2"/></svg>
+    </button>
+    <button class="tb-search" id="tb-search" aria-label="Search the security index">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <span>search the index</span>
+    </button>
+    <div class="tb-sep"></div>
+    <button class="tb-app running active-app" data-tb="browser" title="Cipherscope browser" aria-label="Cipherscope browser">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="20"/><line x1="4" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="20" y2="12"/></svg>
+    </button>
+    <button class="tb-app" data-tb="mail" title="Mailscope" aria-label="Mailscope">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+    </button>
+    <button class="tb-app" data-tb="casebooks" title="Casebooks" aria-label="Casebooks">
+      <svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+    </button>
+    <button class="tb-app" data-tb="academy" title="Academy" aria-label="Academy">
+      <svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg>
+    </button>
+    <button class="tb-app" data-tb="terminal" title="Terminal" aria-label="Terminal">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><polyline points="7 9 10 12 7 15"/><line x1="12" y1="15" x2="17" y2="15"/></svg>
+    </button>
+    <button class="tb-app" data-tb="threatmap" title="Threat map" aria-label="Threat map">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.5 2.3 3.8 5 3.8 8S14.5 17.7 12 20c-2.5-2.3-3.8-5-3.8-8S9.5 6.3 12 4z"/></svg>
+    </button>
+    <button class="tb-app" data-tb="netmon" title="Network monitor" aria-label="Network monitor">
+      <svg viewBox="0 0 24 24"><polyline points="3 13 7 13 10 6 14 18 17 13 21 13"/></svg>
+    </button>
+    <button class="tb-app" data-tb="hashlab" title="Hash lab" aria-label="Hash lab">
+      <svg viewBox="0 0 24 24"><line x1="9" y1="3" x2="7" y2="21"/><line x1="17" y1="3" x2="15" y2="21"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+    </button>
+  </div>
+  <div class="tb-tray">
+    <button class="tray-btn" id="tray-bell" title="Notifications" aria-label="Notifications">
+      <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg>
+      <span class="rb" id="bell-count" style="display:none">0</span>
+    </button>
+    <button class="tray-btn shield" title="Protection active — trackers 0" aria-label="Protection status">
+      <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <span class="tray-label">protected</span>
+    </button>
+    <button class="tray-btn" id="tray-cloak" title="Toggle cloak mode" aria-label="Toggle cloak mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+      <span class="tray-label" id="tray-cloak-label">direct</span>
+    </button>
+    <div class="tb-clock" id="tb-clock" aria-label="Clock"></div>
+  </div>
+</div>
 
 <script>
   // ---------- Window controls ----------
@@ -651,6 +1544,64 @@
     });
   });
 
+  // ---------- Storage (persists where available, session-only otherwise) ----------
+  const store = {
+    mem: {},
+    async get(k) {
+      try {
+        if (window.storage && window.storage.get) {
+          const r = await window.storage.get(k);
+          return r ? JSON.parse(r.value) : null;
+        }
+      } catch (e) { /* key missing or storage unavailable */ }
+      return this.mem[k] !== undefined ? this.mem[k] : null;
+    },
+    async set(k, v) {
+      this.mem[k] = v;
+      try {
+        if (window.storage && window.storage.set) await window.storage.set(k, JSON.stringify(v));
+      } catch (e) { /* fall back to memory */ }
+    },
+    persistent() { return !!(window.storage && window.storage.set); }
+  };
+
+  // ---------- Themes ----------
+  const THEMES = [
+    { id: 'abyss',   label: 'abyss',   color: '#2FD6A0' },
+    { id: 'crimson', label: 'crimson', color: '#FF5C64' },
+    { id: 'amber',   label: 'amber',   color: '#F2A93B' },
+    { id: 'violet',  label: 'violet',  color: '#A78BFA' },
+    { id: 'arctic',  label: 'arctic',  color: '#58A6FF' }
+  ];
+  let currentTheme = 'abyss';
+  function setTheme(id) {
+    if (!THEMES.some(t => t.id === id)) return false;
+    currentTheme = id;
+    if (id === 'abyss') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = id;
+    store.set('cipherscope-theme', id);
+    document.querySelectorAll('.swatch').forEach(sw => sw.classList.toggle('active', sw.dataset.themePick === id));
+    return true;
+  }
+
+  // ---------- Vault: saved links ----------
+  let VAULT = [];
+  function vaultAdd(title, url) {
+    title = (title || url).trim(); url = url.trim();
+    if (!url) return false;
+    if (VAULT.some(v => v.url === url)) return false;
+    VAULT.unshift({ title, url, time: new Date().toTimeString().slice(0, 5) });
+    if (VAULT.length > 50) VAULT.pop();
+    store.set('cipherscope-vault', VAULT);
+    if (typeof openKey !== 'undefined' && openKey === 'vault') renderPanelBody('vault');
+    return true;
+  }
+  function vaultRemove(i) {
+    VAULT.splice(i, 1);
+    store.set('cipherscope-vault', VAULT);
+  }
+  function slug(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
   // ---------- Demo search engine ----------
   const input = document.getElementById('q');
   const results = document.getElementById('results');
@@ -665,6 +1616,9 @@
     { k: ['sql injection','sqli','injection'], sev:'info', badge:'REFERENCE', title:'SQL injection — canonical prevention cheat sheet', sub:'owasp.org · parameterized queries, ORM guidance', trust:97 },
     { k: ['sql injection','sqli','course'], sev:'ok', badge:'COURSE', title:'Academy: web app injection attacks — module 3 of 11', sub:'hands-on lab · resumes where you left off', trust:0, trustLabel:'in academy' },
     { k: ['phishing','passkey'], sev:'high', badge:'TRENDING', title:'Phishing kits abusing passkey reset flows', sub:'3 vendor advisories · 12 verified write-ups', trust:90 },
+    { k: ['phishing','email','mailscope','bec'], sev:'ok', badge:'EXTENSION', title:'Mailscope — inbox verdicts for Gmail & Outlook', sub:'SPF/DKIM/DMARC · lookalike detection · sandboxed links', trust:0, trustLabel:'built-in' },
+    { k: ['dmarc','spf','dkim','email auth'], sev:'info', badge:'REFERENCE', title:'Email authentication explained: SPF, DKIM, DMARC', sub:'canonical guide · alignment, policy modes, reporting', trust:96 },
+    { k: ['bec','business email compromise','wire fraud'], sev:'high', badge:'THREAT', title:'Business email compromise — current lure patterns', sub:'threat intel · invoice fraud, thread hijacking', trust:92 },
     { k: ['nmap','tool','scan'], sev:'ok', badge:'TOOL', title:'nmap — network discovery and security auditing', sub:'official docs · latest stable release', trust:96 }
   ];
 
@@ -678,7 +1632,7 @@
       return;
     }
     results.innerHTML = '<div class="meta">' + hits.length + ' results · verified sources only · ranked by trust</div>' +
-      hits.map(d => `
+      hits.map((d, i) => `
         <div class="r-card sev-${d.sev}">
           <span class="badge ${d.sev === 'crit' ? 'crit' : d.sev === 'high' ? 'high' : d.sev === 'info' ? 'info' : 'ok'}">${d.badge}</span>
           <div class="r-main">
@@ -686,17 +1640,1014 @@
             <div class="r-sub">${d.sub}</div>
           </div>
           <div class="trust">${d.trust ? d.trust : ''}<small>${d.trust ? 'TRUST' : (d.trustLabel || '')}</small></div>
+          <button class="r-save${VAULT.some(v => v.url === 'cipherscope://index/' + slug(d.title)) ? ' saved' : ''}" data-si="${i}" title="Save to vault" aria-label="Save result to vault"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button>
         </div>`).join('');
     results.classList.add('show');
+    results.querySelectorAll('.r-save').forEach(b =>
+      b.addEventListener('click', () => {
+        const d = hits[+b.dataset.si];
+        const ok = vaultAdd(d.title, 'cipherscope://index/' + slug(d.title));
+        b.classList.add('saved');
+        if (ok) notify('vault', 'saved: ' + d.title, 'info', 'vault');
+      }));
   }
 
   let t;
   input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => runSearch(input.value), 160); });
 
+  // ---------- Mailscope email extension demo ----------
+  const MAILS = {
+    phish: {
+      from: 'accounts@<span class="spoof">rnicrosoft-secure.com</span>',
+      subj: 'Action required: unusual sign-in — verify your password now',
+      rows: [
+        { d:'bad',  label:'dmarc',      val:'FAIL — sender not authorized for this domain' },
+        { d:'bad',  label:'spf',        val:'FAIL — originating server not in domain policy' },
+        { d:'warn', label:'domain',     val:'lookalike of microsoft.com · registered 6 days ago' },
+        { d:'info', label:'links',      val:'2 links rewritten → open in sandbox only' },
+        { d:'warn', label:'attachment', val:'invoice.html — detonated in isolation, credential form found' }
+      ],
+      stamp: { cls:'quarantine', text:'⛔ QUARANTINED · TRUST 11 — report to casebook' }
+    },
+    clean: {
+      from: 'security-advisories@apache.org',
+      subj: '[ANNOUNCE] Apache Log4j 2.17.1 released',
+      rows: [
+        { d:'ok',   label:'dmarc',      val:'PASS — aligned, policy reject' },
+        { d:'ok',   label:'spf / dkim', val:'PASS — signature valid, key 2048-bit' },
+        { d:'ok',   label:'domain',     val:'apache.org · verified source in index' },
+        { d:'info', label:'links',      val:'1 link → official advisory, trust 98' },
+        { d:'ok',   label:'attachment', val:'none' }
+      ],
+      stamp: { cls:'clean', text:'✓ VERIFIED SENDER · TRUST 97' }
+    }
+  };
+
+  const mailcard = document.getElementById('mailcard');
+  function renderMail(kind) {
+    const m = MAILS[kind];
+    mailcard.innerHTML = `
+      <div class="m-head">
+        <div class="m-from">from: ${m.from}</div>
+        <div class="m-subj">${m.subj}</div>
+      </div>
+      <div class="m-verdict">
+        ${m.rows.map(r => `
+          <div class="v-row">
+            <span class="v-dot ${r.d}" aria-hidden="true"></span>
+            <span class="v-label">${r.label}</span>
+            <span class="v-val">${r.val}</span>
+          </div>`).join('')}
+      </div>
+      <span class="m-stamp ${m.stamp.cls}">${m.stamp.text}</span>`;
+  }
+  renderMail('phish');
+
+  document.querySelectorAll('.mail-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mail-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderMail(tab.dataset.mail);
+    });
+  });
+
+  // ---------- Extension rail ----------
+  const panel = document.getElementById('panel');
+  const panelTitle = document.getElementById('panel-title');
+  const panelBody = document.getElementById('panel-body');
+  let openKey = null;
+
+  const PANELS = {
+    feed: {
+      title: 'live threat feed',
+      html: `
+        <div class="p-label"><span style="color:var(--teal)">●</span> streaming · verified sources only</div>
+        <div class="feed-row"><span class="v-dot bad"></span><div><div class="f-t">CVE-2026-1337 exploitation spikes — mass scanning observed</div><div class="f-m">14 min ago · honeypot network · CRITICAL 9.8</div></div></div>
+        <div class="feed-row"><span class="v-dot warn"></span><div><div class="f-t">Phishing kit "HookLine v3" now abusing passkey reset flows</div><div class="f-m">42 min ago · 3 vendor advisories · HIGH</div></div></div>
+        <div class="feed-row"><span class="v-dot warn"></span><div><div class="f-t">APT29 spearphishing wave targeting cloud identity providers</div><div class="f-m">1 h ago · threat intel · mapped to ATT&CK T1566</div></div></div>
+        <div class="feed-row"><span class="v-dot info"></span><div><div class="f-t">OpenSSL 3.4.2 patch analysis published</div><div class="f-m">3 h ago · research write-up · 18 min read</div></div></div>
+        <div class="feed-row"><span class="v-dot ok"></span><div><div class="f-t">nmap 8.1 stable released — new TLS fingerprinting scripts</div><div class="f-m">5 h ago · official · tool update</div></div></div>
+        <p class="p-note">feed is scoped to your casebooks + watched components. concept demo — entries are illustrative.</p>`
+    },
+    mail: {
+      title: 'mailscope · email extension',
+      html: `
+        <div class="p-label">inbox protection — last 24h</div>
+        <div class="p-item"><div class="p-row"><div><h4>1 message quarantined</h4><div class="p-sub">credential-phishing · DMARC fail · lookalike domain</div></div><span class="badge crit">TRUST 11</span></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>38 messages verified</h4><div class="p-sub">SPF / DKIM / DMARC aligned · senders in trusted index</div></div><span class="badge ok">CLEAN</span></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>17 links rewritten</h4><div class="p-sub">every click detonates in the sandbox first</div></div><span class="badge info">SANDBOX</span></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>2 attachments detonated</h4><div class="p-sub">invoice.html flagged — hidden credential form</div></div><span class="badge high">FLAGGED</span></div></div>
+        <div class="p-label">actions</div>
+        <button class="p-btn" data-scroll="#mailscope">see how mailscope works ↓</button>
+        <p class="p-note">quarantined phish auto-files into the "internal BEC attempt" casebook with headers + IOCs attached.</p>`
+    },
+    casebooks: {
+      title: 'casebooks · investigations',
+      html: `
+        <div class="p-label">open investigations</div>
+        <div class="p-item"><div class="p-row"><div><h4>APT29 phishing wave</h4><div class="p-sub">14 IOCs · 6 sources · updated 2 h ago</div></div><button class="p-btn ghost" data-export>export IOCs</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>CVE-2026-1337 exposure audit</h4><div class="p-sub">9 IOCs · patch tracking · 3 affected hosts noted</div></div><button class="p-btn ghost" data-export>export IOCs</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>Internal BEC attempt</h4><div class="p-sub">filed by mailscope · headers + lookalike domain attached</div></div><button class="p-btn ghost" data-export>export IOCs</button></div></div>
+        <div class="p-label">how it works</div>
+        <p class="p-note" style="margin-top:0">a casebook remembers what connects — the CVE, the component, the write-up, your notes — and exports STIX / plain IOC lists. shared team casebooks arrive in phase 03.</p>
+        <button class="p-btn" style="margin-top:10px" data-newcase>+ new casebook</button>`
+    },
+    academy: {
+      title: 'academy · courses',
+      html: `
+        <div class="p-item" style="border-color:var(--teal-deep)"><div class="p-row"><div><h4>daily challenge</h4><div class="p-sub">spot the forged DKIM header · 5 min · streak: 12 days</div></div><button class="p-btn" data-challenge>start</button></div></div>
+        <div class="p-label">in progress</div>
+        <div class="p-item"><h4>web app injection attacks</h4><div class="p-sub">module 3 of 11 · hands-on lab · resumes where you left off</div><div class="progress"><i style="width:27%"></i></div></div>
+        <div class="p-item"><h4>email authentication: SPF, DKIM, DMARC</h4><div class="p-sub">module 5 of 6 · surfaced by mailscope activity</div><div class="progress"><i style="width:83%"></i></div></div>
+        <div class="p-item"><h4>memory corruption fundamentals</h4><div class="p-sub">module 1 of 9 · surfaced from your heap-overflow reading</div><div class="progress"><i style="width:8%"></i></div></div>
+        <div class="p-label">just-in-time</div>
+        <p class="p-note" style="margin-top:0">courses react to what you research — open a write-up and the matching module surfaces itself. every real investigation doubles as training.</p>`
+    },
+    scanner: {
+      title: 'ioc scanner',
+      html: `
+        <div class="p-label">check a hash · domain · IP</div>
+        <input class="p-input" id="ioc-q" placeholder="try: rnicrosoft-secure.com" autocomplete="off" aria-label="Indicator to scan">
+        <button class="p-btn" id="ioc-go" style="margin-top:10px">scan against verified intel</button>
+        <div id="ioc-out"></div>
+        <p class="p-note">runs the same trust engine as search + mailscope. concept demo — try: <code>rnicrosoft-secure.com</code>, <code>44d88612fea8a8f36de82e1278abb02f</code>, <code>185.220.101.34</code>, <code>apache.org</code></p>`
+    },
+    breach: {
+      title: 'breach check',
+      html: `
+        <div class="p-label">has this account appeared in a breach?</div>
+        <input class="p-input" id="br-q" placeholder="you@example.com" autocomplete="off" aria-label="Email to check">
+        <button class="p-btn" id="br-go" style="margin-top:10px">check exposure</button>
+        <div id="br-out"></div>
+        <p class="p-note">concept demo — nothing is sent anywhere. the real feature checks a k-anonymized hash against breach corpora, so your address never leaves the browser.</p>`
+    },
+    sandbox: {
+      title: 'sandbox sessions',
+      html: `
+        <div class="p-label">isolated · disposable · auto-wipe</div>
+        <div id="sb-list">
+          <div class="p-item"><div class="p-row"><div><h4>PoC repo — CVE-2026-1337</h4><div class="p-sub">no network egress · filesystem virtual · wipes in 41 min</div></div><button class="p-btn ghost" data-wipe>wipe now</button></div></div>
+          <div class="p-item"><div class="p-row"><div><h4>rewritten link from quarantined email</h4><div class="p-sub">opened via mailscope · credential form neutralized</div></div><button class="p-btn ghost" data-wipe>wipe now</button></div></div>
+        </div>
+        <p class="p-note">risky pages open here by default — nothing follows you home. junior analysts can investigate what only seniors dared touch before.</p>`
+    },
+    arsenal: {
+      title: 'tool arsenal',
+      html: `
+        <div class="p-label">launch inside the sandbox</div>
+        <div class="p-item"><div class="p-row"><div><h4>nmap</h4><div class="p-sub">network discovery · official docs pinned</div></div><button class="p-btn ghost" data-launch>open</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>wireshark</h4><div class="p-sub">packet analysis · capture stays in isolation</div></div><button class="p-btn ghost" data-launch>open</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>ghidra</h4><div class="p-sub">reverse engineering · sample never touches host</div></div><button class="p-btn ghost" data-launch>open</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>yara playground</h4><div class="p-sub">write + test detection rules against samples</div></div><button class="p-btn ghost" data-launch>open</button></div></div>
+        <div class="p-item"><div class="p-row"><div><h4>burp suite community</h4><div class="p-sub">web app testing · proxied through the sandbox</div></div><button class="p-btn ghost" data-launch>open</button></div></div>
+        <p class="p-note">every tool runs against sandboxed sessions only — findings can be sent straight to a casebook.</p>`
+    },
+    vault: {
+      title: 'vault · saved links',
+      html: () => `
+        <div class="p-label">save a link</div>
+        <div class="vault-add">
+          <input class="p-input" id="vl-url" placeholder="https://… or cipherscope://…" aria-label="Link URL">
+          <input class="p-input" id="vl-title" placeholder="title (optional)" aria-label="Link title">
+          <button class="p-btn" id="vl-add">save to vault</button>
+        </div>
+        <div class="p-label">saved (${VAULT.length})</div>
+        ${VAULT.length
+          ? VAULT.map((v, i) => `<div class="p-item vault-item"><h4>${esc(v.title)}</h4><div class="v-url">${esc(v.url)}</div><div class="p-sub">saved ${v.time}</div><div class="v-acts"><button class="p-btn ghost" data-vopen="${i}">open sandboxed</button><button class="p-btn ghost" data-vdel="${i}">remove</button></div></div>`).join('')
+          : '<p class="p-note" style="margin-top:0">nothing saved yet — hit the bookmark on any search result, or paste a link above.</p>'}
+        <button class="p-btn ghost" id="vl-export" style="margin-top:12px"${VAULT.length ? '' : ' disabled'}>export as .txt</button>
+        <p class="p-note">${store.persistent() ? 'vault persists across sessions via secure storage.' : 'session-only right now — the vault wipes with the session, like everything else here.'}</p>`
+    },
+    settings: {
+      title: 'hardening settings',
+      html: () => `
+        <div class="p-label">theme</div>
+        <div class="swatches">${THEMES.map(t => `<button class="swatch${t.id === currentTheme ? ' active' : ''}" data-theme-pick="${t.id}"><i style="background:${t.color}"></i>${t.label}</button>`).join('')}</div>
+        <div class="p-label">hardening</div>
+        <div class="tg"><div>auto-sandbox untrusted pages<small>PoC repos + unknown domains open isolated</small></div><button class="tg-sw on" aria-pressed="true" aria-label="Toggle auto-sandbox"></button></div>
+        <div class="tg"><div>mailscope link rewriting<small>email links detonate in sandbox first</small></div><button class="tg-sw on" aria-pressed="true" aria-label="Toggle link rewriting"></button></div>
+        <div class="tg"><div>academy just-in-time surfacing<small>modules react to what you read</small></div><button class="tg-sw on" aria-pressed="true" aria-label="Toggle academy surfacing"></button></div>
+        <div class="tg"><div>session auto-wipe<small>every 4h · countdown in the footer</small></div><button class="tg-sw on" aria-pressed="true" aria-label="Toggle session auto-wipe"></button></div>
+        <div class="tg"><div>telemetry<small>there is none. this switch doesn't exist.</small></div><button class="tg-sw" disabled aria-label="Telemetry — permanently off" style="opacity:.4;cursor:not-allowed"></button></div>`
+    }
+  };
+
+  function openPanel(key) {
+    if (openKey === key) { closePanel(); return; }
+    openKey = key;
+    panelTitle.textContent = PANELS[key].title;
+    renderPanelBody(key);
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    document.querySelectorAll('.rail-btn[data-panel]').forEach(b =>
+      b.classList.toggle('active', b.dataset.panel === key));
+  }
+  function renderPanelBody(key) {
+    const p = PANELS[key];
+    panelBody.innerHTML = typeof p.html === 'function' ? p.html() : p.html;
+    wirePanel(key);
+  }
+  function closePanel() {
+    openKey = null;
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    document.querySelectorAll('.rail-btn[data-panel]').forEach(b => b.classList.remove('active'));
+  }
+  document.getElementById('panel-close').addEventListener('click', closePanel);
+  document.querySelectorAll('.rail-btn[data-panel]').forEach(btn =>
+    btn.addEventListener('click', () => openPanel(btn.dataset.panel)));
+
+  // Home button
+  document.querySelector('.rail-btn[data-action="home"]').addEventListener('click', () => {
+    closePanel();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    input.focus();
+  });
+
+  // Cloak mode (shared by rail + taskbar tray)
+  const cloakBtn = document.getElementById('btn-cloak');
+  const trayCloak = document.getElementById('tray-cloak');
+  const trayCloakLabel = document.getElementById('tray-cloak-label');
+  const pillEl = document.querySelector('.toolbar .pill');
+  const pillDefault = pillEl.innerHTML;
+  let cloaked = false;
+  function setCloak(state) {
+    cloaked = state;
+    cloakBtn.classList.toggle('cloaked', cloaked);
+    cloakBtn.setAttribute('aria-pressed', String(cloaked));
+    trayCloak.classList.toggle('cloak-on', cloaked);
+    trayCloak.setAttribute('aria-pressed', String(cloaked));
+    trayCloakLabel.textContent = cloaked ? 'cloaked' : 'direct';
+    pillEl.innerHTML = cloaked
+      ? '<span class="pulse"></span> cloaked · encrypted relay · exit: reykjavik'
+      : pillDefault;
+  }
+  cloakBtn.addEventListener('click', () => setCloak(!cloaked));
+  trayCloak.addEventListener('click', () => setCloak(!cloaked));
+
+  // ---------- Panel interactivity ----------
+  const IOC_DB = {
+    'rnicrosoft-secure.com': { d:'bad', label:'MALICIOUS', val:'phishing lookalike of microsoft.com · registered 6 days ago · seen in 1 quarantined email', trust:'TRUST 11' },
+    '44d88612fea8a8f36de82e1278abb02f': { d:'bad', label:'MALWARE', val:'EICAR test file (MD5) · standard AV test artifact · detonate in sandbox only', trust:'KNOWN' },
+    '185.220.101.34': { d:'info', label:'TOR EXIT', val:'known Tor exit node · not inherently malicious · treat traffic as anonymized', trust:'CONTEXT' },
+    'apache.org': { d:'ok', label:'VERIFIED', val:'verified source in the trust index · official advisories + releases', trust:'TRUST 98' }
+  };
+  function iocType(q) {
+    if (/^[a-f0-9]{32}$/i.test(q) || /^[a-f0-9]{64}$/i.test(q)) return 'hash';
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(q)) return 'ip';
+    if (/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(q)) return 'domain';
+    return 'indicator';
+  }
+  function wirePanel(key) {
+    // theme swatches (settings)
+    panelBody.querySelectorAll('[data-theme-pick]').forEach(sw =>
+      sw.addEventListener('click', () => setTheme(sw.dataset.themePick)));
+    // vault
+    if (key === 'vault') {
+      const urlIn = panelBody.querySelector('#vl-url');
+      const titleIn = panelBody.querySelector('#vl-title');
+      const add = () => {
+        const ok = vaultAdd(titleIn.value, urlIn.value);
+        if (ok) { notify('vault', 'saved: ' + (titleIn.value || urlIn.value).trim(), 'info', 'vault'); renderPanelBody('vault'); }
+        else if (urlIn.value.trim()) { urlIn.value = ''; urlIn.placeholder = 'already in vault'; }
+      };
+      panelBody.querySelector('#vl-add').addEventListener('click', add);
+      [urlIn, titleIn].forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') add(); }));
+      panelBody.querySelectorAll('[data-vdel]').forEach(b =>
+        b.addEventListener('click', () => { vaultRemove(+b.dataset.vdel); renderPanelBody('vault'); }));
+      panelBody.querySelectorAll('[data-vopen]').forEach(b =>
+        b.addEventListener('click', () => { b.textContent = 'in sandbox ✓'; b.disabled = true; }));
+      panelBody.querySelector('#vl-export')?.addEventListener('click', () => {
+        const txt = VAULT.map(v => v.title + '\n' + v.url).join('\n\n');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' }));
+        a.download = 'cipherscope-vault.txt';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+    }
+    // scroll-to buttons
+    panelBody.querySelectorAll('[data-scroll]').forEach(b =>
+      b.addEventListener('click', () => {
+        closePanel();
+        document.querySelector(b.dataset.scroll)?.scrollIntoView({ behavior: 'smooth' });
+      }));
+    // casebook export / new
+    panelBody.querySelectorAll('[data-export]').forEach(b =>
+      b.addEventListener('click', () => { b.textContent = 'exported ✓'; b.disabled = true; }));
+    panelBody.querySelector('[data-newcase]')?.addEventListener('click', e => {
+      e.target.textContent = 'created "untitled investigation" ✓'; e.target.disabled = true;
+    });
+    panelBody.querySelector('[data-challenge]')?.addEventListener('click', e => {
+      e.target.textContent = 'day 13 ✓'; e.target.disabled = true;
+    });
+    // sandbox wipe
+    panelBody.querySelectorAll('[data-wipe]').forEach(b =>
+      b.addEventListener('click', () => {
+        const item = b.closest('.p-item');
+        item.style.opacity = '.35';
+        item.querySelector('.p-sub').textContent = 'wiped — nothing persisted';
+        b.remove();
+      }));
+    // arsenal launch
+    panelBody.querySelectorAll('[data-launch]').forEach(b =>
+      b.addEventListener('click', () => { b.textContent = 'in sandbox ✓'; b.disabled = true; }));
+    // settings toggles
+    panelBody.querySelectorAll('.tg-sw:not([disabled])').forEach(sw =>
+      sw.addEventListener('click', () => {
+        const on = sw.classList.toggle('on');
+        sw.setAttribute('aria-pressed', String(on));
+      }));
+    // IOC scanner
+    if (key === 'scanner') {
+      const q = panelBody.querySelector('#ioc-q');
+      const out = panelBody.querySelector('#ioc-out');
+      const scan = () => {
+        const v = q.value.trim().toLowerCase();
+        if (!v) return;
+        const hit = IOC_DB[v];
+        const r = hit || { d:'warn', label: iocType(v).toUpperCase(), val:'no verified intel for this ' + iocType(v) + ' — concept demo index. unknown ≠ safe: open related pages sandboxed.', trust:'UNKNOWN' };
+        out.innerHTML = `<div class="scan-card"><div class="v-row"><span class="v-dot ${r.d}"></span><span class="v-label">${r.label}</span><span class="v-val">${r.val}</span></div><div class="v-row"><span class="v-dot info"></span><span class="v-label">verdict</span><span class="v-val">${r.trust} · add to casebook available</span></div></div>`;
+      };
+      panelBody.querySelector('#ioc-go').addEventListener('click', scan);
+      q.addEventListener('keydown', e => { if (e.key === 'Enter') scan(); });
+    }
+    // breach check
+    if (key === 'breach') {
+      const q = panelBody.querySelector('#br-q');
+      const out = panelBody.querySelector('#br-out');
+      const check = () => {
+        const v = q.value.trim().toLowerCase();
+        if (!v || !v.includes('@')) return;
+        let h = 0; for (const c of v) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+        const hitCount = h % 3;
+        out.innerHTML = hitCount === 0
+          ? `<div class="scan-card"><div class="v-row"><span class="v-dot ok"></span><span class="v-label">clean</span><span class="v-val">no exposure found in the demo corpus · keep unique passwords + passkeys anyway</span></div></div>`
+          : `<div class="scan-card"><div class="v-row"><span class="v-dot warn"></span><span class="v-label">exposed</span><span class="v-val">found in ${hitCount} demo breach corpus entr${hitCount === 1 ? 'y' : 'ies'} (illustrative)</span></div><div class="v-row"><span class="v-dot info"></span><span class="v-label">do next</span><span class="v-val">rotate the password, enable passkeys / MFA, check reuse across accounts</span></div></div>`;
+      };
+      panelBody.querySelector('#br-go').addEventListener('click', check);
+      q.addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+    }
+  }
+
+  // ---------- Taskbar ----------
+  const startmenu = document.getElementById('startmenu');
+  const startBtn = document.getElementById('tb-start');
+
+  function toggleStart(force) {
+    const open = force !== undefined ? force : !startmenu.classList.contains('open');
+    startmenu.classList.toggle('open', open);
+    startmenu.setAttribute('aria-hidden', String(!open));
+    startBtn.setAttribute('aria-expanded', String(open));
+  }
+  startBtn.addEventListener('click', e => { e.stopPropagation(); toggleStart(); });
+  document.addEventListener('click', e => {
+    if (startmenu.classList.contains('open') && !startmenu.contains(e.target)) toggleStart(false);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { toggleStart(false); closePanel(); } });
+
+  document.getElementById('tb-search').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    input.focus();
+  });
+
+  // Mini windows — draggable, focusable, minimizable
+  const MINIWINS = {
+    terminal: document.getElementById('mw-terminal'),
+    threatmap: document.getElementById('mw-threatmap'),
+    netmon: document.getElementById('mw-netmon'),
+    hashlab: document.getElementById('mw-hashlab'),
+    scopeshell: document.getElementById('mw-scopeshell')
+  };
+  let zTop = 100;
+  function focusWin(app) {
+    Object.values(MINIWINS).forEach(w => w.classList.remove('focused'));
+    const w = MINIWINS[app];
+    w.classList.add('focused');
+    w.style.zIndex = ++zTop;
+  }
+  Object.entries(MINIWINS).forEach(([app, w]) =>
+    w.addEventListener('pointerdown', () => focusWin(app)));
+
+  function tbButtons(app) { return document.querySelectorAll('.tb-app[data-tb="' + app + '"], .tb-shell[data-tb="' + app + '"]'); }
+  function toggleMiniwin(app) {
+    const w = MINIWINS[app];
+    const open = !w.classList.contains('open');
+    w.classList.toggle('open', open);
+    tbButtons(app).forEach(b => b.classList.toggle('running', open));
+    if (open) {
+      focusWin(app);
+      if (app === 'terminal') { termBoot(); document.getElementById('term-input').focus(); }
+      if (app === 'threatmap') mapBoot();
+      if (app === 'netmon') netBoot();
+      if (app === 'scopeshell') { shellBoot(); document.getElementById('shell-input').focus(); }
+    }
+  }
+  document.querySelectorAll('[data-mwclose]').forEach(b =>
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      const app = b.dataset.mwclose;
+      MINIWINS[app].classList.remove('open');
+      tbButtons(app).forEach(x => x.classList.remove('running'));
+    }));
+  // minimize: hide window, keep running indicator — taskbar icon restores it
+  document.querySelectorAll('[data-mwmin]').forEach(b =>
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      MINIWINS[b.dataset.mwmin].classList.remove('open');
+    }));
+
+  // dragging via the title bar
+  document.querySelectorAll('[data-mwdrag]').forEach(head => {
+    head.addEventListener('pointerdown', e => {
+      if (e.target.closest('.x')) return;
+      const w = MINIWINS[head.dataset.mwdrag];
+      const rect = w.getBoundingClientRect();
+      const ox = e.clientX - rect.left, oy = e.clientY - rect.top;
+      w.style.left = rect.left + 'px'; w.style.top = rect.top + 'px';
+      w.style.right = 'auto'; w.style.bottom = 'auto';
+      const move = ev => {
+        w.style.left = Math.min(Math.max(ev.clientX - ox, -rect.width + 60), innerWidth - 60) + 'px';
+        w.style.top = Math.min(Math.max(ev.clientY - oy, 0), innerHeight - 40) + 'px';
+      };
+      const up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
+      addEventListener('pointermove', move);
+      addEventListener('pointerup', up);
+      e.preventDefault();
+    });
+  });
+
+  // App dispatch — taskbar icons + start menu tiles share data-tb keys
+  function launchApp(app) {
+    toggleStart(false);
+    if (app === 'browser') {
+      closePanel();
+      win.classList.remove('minimized', 'closed');
+      restore.classList.remove('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (MINIWINS[app]) {
+      toggleMiniwin(app);
+    } else {
+      if (openKey !== app) openPanel(app); // ensure open — launching an open app shouldn't close it
+    }
+  }
+  document.querySelectorAll('.tb-app[data-tb], .sm-app[data-tb], .tb-shell[data-tb]').forEach(b =>
+    b.addEventListener('click', () => launchApp(b.dataset.tb)));
+
+  // Panel state reflects on taskbar app indicators
+  const panelApps = ['mail', 'casebooks', 'academy'];
+  const _openPanel = openPanel, _closePanel = closePanel;
+  openPanel = function (key) {
+    _openPanel(key);
+    panelApps.forEach(a => tbButtons(a).forEach(b => b.classList.toggle('running', openKey === a)));
+  };
+  closePanel = function () {
+    _closePanel();
+    panelApps.forEach(a => tbButtons(a).forEach(b => b.classList.remove('running')));
+  };
+
+  // ---------- Terminal app ----------
+  const termBody = document.getElementById('term-body');
+  const termInput = document.getElementById('term-input');
+  let termBooted = false;
+  function termPrint(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    termBody.appendChild(div);
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+  function termBoot() {
+    if (termBooted) return;
+    termBooted = true;
+    termPrint('<span class="t-dim">cipherscope terminal v0.1 — sandboxed · no host access · concept demo</span>');
+    termPrint('<span class="t-dim">type <span class="t-ok">help</span> for commands</span>');
+  }
+  const TERM_CMDS = {
+    help: () => termPrint('commands: <span class="t-ok">scan &lt;ioc&gt;</span> · <span class="t-ok">hash &lt;text&gt;</span> · <span class="t-ok">b64 &lt;e|d&gt; &lt;text&gt;</span> · <span class="t-ok">jwt &lt;token&gt;</span> · <span class="t-ok">dig &lt;domain&gt;</span> · <span class="t-ok">cloak</span> · <span class="t-ok">cases</span> · <span class="t-ok">wipe</span> · <span class="t-ok">whoami</span> · <span class="t-ok">clear</span> · ↑↓ history'),
+    whoami: () => termPrint('analyst@cipherscope · session isolated · trackers 0'),
+    cases: () => termPrint('3 open casebooks: <span class="t-warn">apt29-phishing-wave</span> (14 IOCs) · cve-2026-1337-audit (9) · internal-bec (mailscope)'),
+    cloak: () => { setCloak(!cloaked); termPrint(cloaked ? '<span class="t-ok">✓ cloaked — encrypted relay, exit: reykjavik</span>' : '<span class="t-dim">cloak disabled — direct connection</span>'); },
+    wipe: () => termPrint('<span class="t-ok">✓ sandbox wiped — nothing persisted, nothing followed you home</span>'),
+    clear: () => { termBody.innerHTML = ''; }
+  };
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  async function shaHex(algo, text) {
+    if (!(window.crypto && crypto.subtle)) throw new Error('webcrypto unavailable');
+    const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  function jwtDecode(tok) {
+    const parts = tok.split('.');
+    if (parts.length !== 3) throw new Error('not a JWT (need 3 dot-separated parts)');
+    const dec = s => JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/')));
+    return { header: dec(parts[0]), payload: dec(parts[1]) };
+  }
+  const termHist = [];
+  let termHistIdx = -1;
+  termInput.addEventListener('keydown', async e => {
+    if (e.key === 'ArrowUp') {
+      if (termHist.length) { termHistIdx = Math.max(0, termHistIdx < 0 ? termHist.length - 1 : termHistIdx - 1); termInput.value = termHist[termHistIdx]; }
+      e.preventDefault(); return;
+    }
+    if (e.key === 'ArrowDown') {
+      if (termHistIdx >= 0) { termHistIdx++; termInput.value = termHist[termHistIdx] || ''; if (termHistIdx >= termHist.length) termHistIdx = -1; }
+      e.preventDefault(); return;
+    }
+    if (e.key !== 'Enter') return;
+    const raw = termInput.value.trim();
+    termInput.value = '';
+    if (!raw) return;
+    termHist.push(raw); termHistIdx = -1;
+    termPrint('<span class="t-ok">scope❯</span> ' + esc(raw));
+    const [cmd, ...args] = raw.split(/\s+/);
+    const c = cmd.toLowerCase();
+    try {
+      if (c === 'scan') {
+        const t = args.join(' ').toLowerCase();
+        if (!t) { termPrint('<span class="t-warn">usage: scan &lt;hash|domain|ip&gt;</span>'); return; }
+        const hit = IOC_DB[t];
+        termPrint(hit
+          ? '<span class="' + (hit.d === 'bad' ? 't-bad' : hit.d === 'ok' ? 't-ok' : 't-warn') + '">' + hit.label + '</span> — ' + hit.val + ' · ' + hit.trust
+          : '<span class="t-warn">UNKNOWN ' + iocType(t).toUpperCase() + '</span> — no verified intel in demo index. unknown ≠ safe.');
+      } else if (c === 'hash') {
+        const t = args.join(' ');
+        if (!t) { termPrint('<span class="t-warn">usage: hash &lt;text&gt;</span>'); return; }
+        termPrint('sha256  <span class="t-ok">' + await shaHex('SHA-256', t) + '</span>');
+        termPrint('sha1    <span class="t-dim">' + await shaHex('SHA-1', t) + '</span>');
+      } else if (c === 'b64') {
+        const mode = (args.shift() || '').toLowerCase();
+        const t = args.join(' ');
+        if (!t || !['e', 'd'].includes(mode)) { termPrint('<span class="t-warn">usage: b64 e|d &lt;text&gt;</span>'); return; }
+        termPrint(mode === 'e' ? esc(btoa(t)) : esc(atob(t)));
+      } else if (c === 'jwt') {
+        const r = jwtDecode(args.join(''));
+        termPrint('<span class="t-dim">header</span>  ' + esc(JSON.stringify(r.header)));
+        termPrint('<span class="t-dim">payload</span> ' + esc(JSON.stringify(r.payload)));
+        termPrint('<span class="t-warn">⚠ decoded, not verified — never trust an unverified signature</span>');
+      } else if (c === 'dig') {
+        const t = (args[0] || '').toLowerCase();
+        if (!t) { termPrint('<span class="t-warn">usage: dig &lt;domain&gt;</span>'); return; }
+        termPrint(t + ' · A 203.0.113.' + (1 + (t.length * 7) % 250) + ' · TTL 300 <span class="t-dim">(concept demo — RFC 5737 test range)</span>');
+      } else if (TERM_CMDS[c]) {
+        TERM_CMDS[c]();
+      } else {
+        termPrint('<span class="t-bad">command not found:</span> ' + esc(c) + ' — try <span class="t-ok">help</span>');
+      }
+    } catch (err) {
+      termPrint('<span class="t-bad">error:</span> ' + esc(String(err.message || err)));
+    }
+  });
+
+  // ---------- Threat map app ----------
+  const mapBodyEl = document.getElementById('map-body');
+  const mapCount = document.getElementById('map-count');
+  let mapTimer = null, mapEvents = 0;
+  const MAP_BASE = [
+    [16, 34, 'a-scan'], [24, 46, 'a-high'], [30, 30, 'a-crit'], [46, 26, 'a-high'],
+    [52, 40, 'a-scan'], [58, 30, 'a-crit'], [66, 46, 'a-high'], [74, 34, 'a-crit'],
+    [80, 58, 'a-scan'], [40, 62, 'a-high'], [60, 68, 'a-scan'], [22, 70, 'a-scan']
+  ];
+  function addDot(x, y, cls, temp) {
+    const d = document.createElement('span');
+    d.className = 'atk ' + cls;
+    d.style.left = x + '%';
+    d.style.top = y + '%';
+    mapBodyEl.appendChild(d);
+    if (temp) setTimeout(() => d.remove(), 5000);
+  }
+  function mapBoot() {
+    if (mapTimer) return;
+    mapBodyEl.innerHTML = '';
+    MAP_BASE.forEach(([x, y, c]) => addDot(x, y, c));
+    mapEvents = 147;
+    mapCount.textContent = 'events observed: ' + mapEvents;
+    mapTimer = setInterval(() => {
+      if (!MINIWINS.threatmap.classList.contains('open')) { clearInterval(mapTimer); mapTimer = null; return; }
+      const classes = ['a-crit', 'a-high', 'a-scan'];
+      addDot(8 + Math.random() * 84, 12 + Math.random() * 72, classes[Math.floor(Math.random() * 3)], true);
+      mapEvents += 1 + Math.floor(Math.random() * 3);
+      mapCount.textContent = 'events observed: ' + mapEvents;
+    }, 1800);
+  }
+
+  // ---------- Taskbar clock ----------
+  const clockEl = document.getElementById('tb-clock');
+  function tick() {
+    const n = new Date();
+    const hh = String(n.getHours()).padStart(2, '0');
+    const mm = String(n.getMinutes()).padStart(2, '0');
+    clockEl.innerHTML = hh + ':' + mm + '<br>' +
+      n.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+  tick();
+  setInterval(tick, 15000);
+
+  // ---------- NetMon app ----------
+  const netBodyEl = document.getElementById('net-body');
+  const netBlockedEl = document.getElementById('net-blocked');
+  const netTotalEl = document.getElementById('net-total');
+  let netTimer = null, netBlocked = 0, netTotal = 0;
+  const NET_POOL = [
+    ['nvd.nist.gov', 'tls', 'allow', 'allowed'],
+    ['apache.org', 'tls', 'allow', 'allowed'],
+    ['owasp.org', 'tls', 'allow', 'allowed'],
+    ['attack.mitre.org', 'tls', 'allow', 'allowed'],
+    ['tracker.adnet-metrics.io', 'tls', 'block', 'blocked'],
+    ['fingerprint.telemetry-cdn.net', 'tls', 'block', 'blocked'],
+    ['pixel.behavior-sync.com', 'http', 'block', 'blocked'],
+    ['beacon.session-replay.io', 'tls', 'block', 'blocked'],
+    ['raw.poc-mirror.example', 'tls', 'sand', 'sandboxed'],
+    ['cdn.unknown-origin.example', 'tls', 'sand', 'sandboxed']
+  ];
+  function netRow() {
+    const [d, p, cls, label] = NET_POOL[Math.floor(Math.random() * NET_POOL.length)];
+    const row = document.createElement('div');
+    row.className = 'net-row';
+    row.innerHTML = '<span class="n-d">' + d + '</span><span class="n-p">' + p + '</span><span class="n-s ' + cls + '">' + label + '</span>';
+    netBodyEl.prepend(row);
+    while (netBodyEl.children.length > 30) netBodyEl.lastChild.remove();
+    netTotal++;
+    if (cls === 'block') netBlocked++;
+    netBlockedEl.textContent = netBlocked;
+    netTotalEl.textContent = 'connections: ' + netTotal;
+  }
+  function netBoot() {
+    if (netTimer) return;
+    for (let i = 0; i < 6; i++) netRow();
+    netTimer = setInterval(() => {
+      if (!MINIWINS.netmon.classList.contains('open')) { clearInterval(netTimer); netTimer = null; return; }
+      netRow();
+    }, 1500);
+  }
+
+  // ---------- Hash Lab app ----------
+  const labIn = document.getElementById('lab-in');
+  const labOut = document.getElementById('lab-out');
+  const LAB_OPS = {
+    sha256: async t => 'SHA-256\n' + await shaHex('SHA-256', t),
+    sha1: async t => 'SHA-1 (broken for signatures — fingerprinting only)\n' + await shaHex('SHA-1', t),
+    b64e: async t => btoa(t),
+    b64d: async t => atob(t),
+    urld: async t => decodeURIComponent(t.replace(/\+/g, ' ')),
+    jwt: async t => {
+      const r = jwtDecode(t.trim());
+      return 'header:  ' + JSON.stringify(r.header, null, 1) + '\npayload: ' + JSON.stringify(r.payload, null, 1) + '\n⚠ decoded, not verified';
+    }
+  };
+  document.querySelectorAll('[data-lab]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const t = labIn.value;
+      if (!t.trim()) { labOut.innerHTML = '<span class="t-bad">give me some input first.</span>'; return; }
+      try {
+        const out = await LAB_OPS[b.dataset.lab](t);
+        labOut.textContent = out;
+      } catch (err) {
+        labOut.innerHTML = '<span class="t-bad">error: ' + esc(String(err.message || err)) + '</span>';
+      }
+    }));
+
+  // ---------- Notifications ----------
+  const toastsEl = document.getElementById('toasts');
+  const notifcenter = document.getElementById('notifcenter');
+  const ncBody = document.getElementById('nc-body');
+  const bell = document.getElementById('tray-bell');
+  const bellCount = document.getElementById('bell-count');
+  const NOTIF_LOG = [];
+  let unread = 0;
+  function updateBell() {
+    bellCount.style.display = unread ? 'grid' : 'none';
+    bellCount.textContent = unread > 9 ? '9+' : unread;
+  }
+  function renderNC() {
+    ncBody.innerHTML = NOTIF_LOG.length
+      ? NOTIF_LOG.map((n, i) => '<div class="nc-item" data-nci="' + i + '"><h6>' + n.title + '</h6><p>' + n.msg + ' · ' + n.time + '</p></div>').join('')
+      : '<div class="nc-empty">all quiet — nothing needs you.</div>';
+    ncBody.querySelectorAll('[data-nci]').forEach(el =>
+      el.addEventListener('click', () => {
+        const n = NOTIF_LOG[+el.dataset.nci];
+        notifcenter.classList.remove('open');
+        if (n.app) launchApp(n.app);
+      }));
+  }
+  function notify(title, msg, sev, app) {
+    const time = new Date().toTimeString().slice(0, 5);
+    NOTIF_LOG.unshift({ title, msg, sev, app, time });
+    if (NOTIF_LOG.length > 20) NOTIF_LOG.pop();
+    unread++; updateBell(); renderNC();
+    const t = document.createElement('div');
+    t.className = 'toast sev-' + (sev || 'info');
+    t.innerHTML = '<h5>' + title + '<small>' + time + '</small></h5><p>' + msg + '</p>';
+    t.addEventListener('click', () => { t.remove(); if (app) launchApp(app); });
+    toastsEl.appendChild(t);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 6000);
+  }
+  bell.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = notifcenter.classList.toggle('open');
+    if (open) { unread = 0; updateBell(); }
+  });
+  document.addEventListener('click', e => {
+    if (notifcenter.classList.contains('open') && !notifcenter.contains(e.target)) notifcenter.classList.remove('open');
+  });
+  document.getElementById('nc-clear').addEventListener('click', () => { NOTIF_LOG.length = 0; renderNC(); });
+
+  // demo pushes
+  const NOTIF_POOL = [
+    ['mailscope', 'quarantined a credential-phishing message — DMARC fail, lookalike domain', 'crit', 'mail'],
+    ['threat feed', 'CVE-2026-1337 exploitation spike — mass scanning observed', 'crit', 'feed'],
+    ['netmon', 'blocked 4 tracker connections in the last minute', 'high', 'netmon'],
+    ['academy', 'daily challenge unlocked: spot the forged DKIM header', 'info', 'academy'],
+    ['sandbox', 'PoC session auto-wiped — nothing persisted', 'info', 'sandbox']
+  ];
+  setTimeout(() => notify(...NOTIF_POOL[0]), 8000);
+  setTimeout(() => notify(...NOTIF_POOL[1]), 24000);
+  let notifIdx = 2;
+  setInterval(() => { notify(...NOTIF_POOL[notifIdx % NOTIF_POOL.length]); notifIdx++; }, 50000);
+
+  // ---------- Command palette ----------
+  const palette = document.getElementById('palette');
+  const palInput = document.getElementById('pal-input');
+  const palList = document.getElementById('pal-list');
+  let palSel = 0;
+  const PAL_ACTIONS = [
+    { name: 'open mailscope', hint: 'email extension', run: () => launchApp('mail') },
+    { name: 'open casebooks', hint: 'investigations', run: () => launchApp('casebooks') },
+    { name: 'open academy', hint: 'courses', run: () => launchApp('academy') },
+    { name: 'open threat feed', hint: 'live intel', run: () => launchApp('feed') },
+    { name: 'open ioc scanner', hint: 'hash · domain · ip', run: () => launchApp('scanner') },
+    { name: 'open breach check', hint: 'exposure', run: () => launchApp('breach') },
+    { name: 'open scope-shell', hint: 'advanced terminal', run: () => launchApp('scopeshell') },
+    { name: 'open terminal', hint: 'sandboxed shell', run: () => launchApp('terminal') },
+    { name: 'open threat map', hint: 'global events', run: () => launchApp('threatmap') },
+    { name: 'open netmon', hint: 'live connections', run: () => launchApp('netmon') },
+    { name: 'open hash lab', hint: 'crypto toolbox', run: () => launchApp('hashlab') },
+    { name: 'open sandbox sessions', hint: 'isolation', run: () => launchApp('sandbox') },
+    { name: 'open tool arsenal', hint: 'nmap · ghidra · yara', run: () => launchApp('arsenal') },
+    { name: 'open vault', hint: 'saved links', run: () => launchApp('vault') },
+    { name: 'toggle cloak mode', hint: 'encrypted relay', run: () => setCloak(!cloaked) },
+    { name: 'theme: abyss', hint: 'teal default', run: () => setTheme('abyss') },
+    { name: 'theme: crimson', hint: 'red ops', run: () => setTheme('crimson') },
+    { name: 'theme: amber', hint: 'retro crt', run: () => setTheme('amber') },
+    { name: 'theme: violet', hint: 'night shift', run: () => setTheme('violet') },
+    { name: 'theme: arctic', hint: 'cold blue', run: () => setTheme('arctic') },
+    { name: 'wipe session now', hint: 'leaves nothing', run: () => notify('sandbox', 'session wiped on demand — nothing persisted', 'info', 'sandbox') },
+    { name: 'search the index', hint: 'focus search', run: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); input.focus(); } },
+    { name: 'hardening settings', hint: 'toggles', run: () => launchApp('settings') }
+  ];
+  function palRender() {
+    const q = palInput.value.trim().toLowerCase();
+    const hits = PAL_ACTIONS.filter(a => a.name.includes(q) || a.hint.includes(q));
+    palSel = Math.min(palSel, Math.max(0, hits.length - 1));
+    palList.innerHTML = hits.length
+      ? hits.map((a, i) => '<button class="pal-item' + (i === palSel ? ' sel' : '') + '" data-pi="' + PAL_ACTIONS.indexOf(a) + '"><span>' + a.name + '</span><span class="hint">' + a.hint + '</span></button>').join('')
+      : '<div class="pal-item" style="cursor:default">no matching command</div>';
+    palList.querySelectorAll('[data-pi]').forEach(el =>
+      el.addEventListener('click', () => { palClose(); PAL_ACTIONS[+el.dataset.pi].run(); }));
+  }
+  function palOpen() {
+    palette.classList.add('open');
+    palette.setAttribute('aria-hidden', 'false');
+    palInput.value = ''; palSel = 0; palRender();
+    palInput.focus();
+  }
+  function palClose() {
+    palette.classList.remove('open');
+    palette.setAttribute('aria-hidden', 'true');
+  }
+  palette.addEventListener('click', e => { if (e.target === palette) palClose(); });
+  palInput.addEventListener('input', () => { palSel = 0; palRender(); });
+  palInput.addEventListener('keydown', e => {
+    const items = palList.querySelectorAll('[data-pi]');
+    if (e.key === 'ArrowDown') { palSel = Math.min(palSel + 1, items.length - 1); palRender(); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { palSel = Math.max(palSel - 1, 0); palRender(); e.preventDefault(); }
+    else if (e.key === 'Enter') { const el = items[palSel]; if (el) { palClose(); PAL_ACTIONS[+el.dataset.pi].run(); } }
+    else if (e.key === 'Escape') palClose();
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+      e.preventDefault();
+      palette.classList.contains('open') ? palClose() : palOpen();
+    }
+  });
+
+  // ---------- ScopeShell: advanced terminal ----------
+  const shellBody = document.getElementById('shell-body');
+  const shellInput = document.getElementById('shell-input');
+  function shPrint(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    shellBody.appendChild(div);
+    shellBody.scrollTop = shellBody.scrollHeight;
+  }
+  const CVE_DB = {
+    'cve-2021-44228': { name: 'Log4Shell — Log4j2 JNDI RCE', cvss: '10.0 CRITICAL', state: 'patched in 2.17.1', cls: 't-bad' },
+    'cve-2026-1337': { name: 'OpenSSL heap overflow RCE', cvss: '9.8 CRITICAL', state: 'exploited in wild · patch 3.4.2', cls: 't-bad' },
+    'cve-2025-0042': { name: 'Chromium sandbox escape (demo)', cvss: '8.8 HIGH', state: 'patched · cipherscope unaffected (isolation)', cls: 't-warn' }
+  };
+  const TRUST_DB = { 'nvd.nist.gov': 99, 'apache.org': 98, 'owasp.org': 97, 'attack.mitre.org': 96, 'rnicrosoft-secure.com': 11 };
+  function entropyOf(t) {
+    let cs = 0;
+    if (/[a-z]/.test(t)) cs += 26;
+    if (/[A-Z]/.test(t)) cs += 26;
+    if (/[0-9]/.test(t)) cs += 10;
+    if (/[^a-zA-Z0-9]/.test(t)) cs += 33;
+    return Math.round(t.length * Math.log2(cs || 1));
+  }
+  function pwgen(len) {
+    const cs = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!#$%&*+-=?@_';
+    const buf = new Uint32Array(len);
+    (window.crypto || {}).getRandomValues ? crypto.getRandomValues(buf) : buf.forEach((_, i) => buf[i] = Math.floor(Math.random() * 1e9));
+    return [...buf].map(n => cs[n % cs.length]).join('');
+  }
+  const APPS_LIST = 'mail · casebooks · academy · vault · feed · scanner · breach · sandbox · arsenal · settings · terminal · threatmap · netmon · hashlab';
+
+  // every command self-documents — `help` and the boot listing are generated from this registry
+  const SHELL_CMDS = [
+    { c: 'help', a: '', d: 'list all commands', f: () => shellHelp() },
+    { c: 'about', a: '', d: 'what cipherscope is', f: () => shPrint('cipherscope — the cybersecurity browser. curated trust-scored index · sandbox by default · casebooks · academy · mailscope. concept build.') },
+    { c: 'version', a: '', d: 'build info', f: () => shPrint('cipherscope 0.9.0-concept · scopeshell 1.0 · chromium fork planned (phase 02)') },
+    { c: 'status', a: '', d: 'session security state', f: () => {
+      shPrint('cloak: ' + (cloaked ? '<span class="t-ok">on — exit reykjavik</span>' : '<span class="t-dim">off — direct</span>') + ' · trackers blocked: <span class="t-ok">' + netBlocked + '</span> · sandbox sessions: 2 · session wipes in 4h');
+    } },
+    { c: 'search', a: '<query>', d: 'run a query in the verified index', f: args => {
+      const q = args.join(' ');
+      if (!q) return shPrint('<span class="t-warn">usage: search &lt;query&gt;</span>');
+      input.value = q; runSearch(q);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      shPrint('<span class="t-ok">✓</span> query sent to the index — results above the fold');
+    } },
+    { c: 'open', a: '<app>', d: 'launch an app: ' + APPS_LIST, f: args => {
+      const app = (args[0] || '').toLowerCase();
+      if (MINIWINS[app] || PANELS[app] || app === 'browser') { launchApp(app); shPrint('<span class="t-ok">✓ launched ' + app + '</span>'); }
+      else shPrint('<span class="t-warn">unknown app.</span> try: ' + APPS_LIST);
+    } },
+    { c: 'scan', a: '<ioc>', d: 'check hash / domain / IP against verified intel', f: args => {
+      const t = args.join(' ').toLowerCase();
+      if (!t) return shPrint('<span class="t-warn">usage: scan &lt;hash|domain|ip&gt;</span>');
+      const hit = IOC_DB[t];
+      shPrint(hit
+        ? '<span class="' + (hit.d === 'bad' ? 't-bad' : hit.d === 'ok' ? 't-ok' : 't-warn') + '">' + hit.label + '</span> — ' + hit.val + ' · ' + hit.trust
+        : '<span class="t-warn">UNKNOWN ' + iocType(t).toUpperCase() + '</span> — no verified intel in demo index. unknown ≠ safe.');
+    } },
+    { c: 'cve', a: '<id>', d: 'look up a CVE in the index', f: args => {
+      const id = (args[0] || '').toLowerCase();
+      const hit = CVE_DB[id];
+      shPrint(hit ? '<span class="' + hit.cls + '">' + id.toUpperCase() + '</span> · ' + hit.name + ' · CVSS ' + hit.cvss + ' · ' + hit.state
+                  : '<span class="t-warn">not in demo index.</span> try: cve-2021-44228 · cve-2026-1337 · cve-2025-0042');
+    } },
+    { c: 'trust', a: '<domain>', d: 'trust score for a source', f: args => {
+      const dm = (args[0] || '').toLowerCase();
+      if (!dm) return shPrint('<span class="t-warn">usage: trust &lt;domain&gt;</span>');
+      const s = TRUST_DB[dm];
+      shPrint(s === undefined ? dm + ' — <span class="t-dim">not in the verified index</span> · pages open sandboxed'
+        : dm + ' — trust <span class="' + (s > 60 ? 't-ok' : 't-bad') + '">' + s + '</span>' + (s < 40 ? ' · <span class="t-bad">flagged malicious</span>' : ' · verified source'));
+    } },
+    { c: 'headers', a: '<domain>', d: 'security header audit (demo)', f: args => {
+      const dm = (args[0] || 'example.com').toLowerCase();
+      const good = (TRUST_DB[dm] || 0) > 60;
+      const r = k => good || (dm.length * k) % 3 ? '<span class="t-ok">pass</span>' : '<span class="t-bad">missing</span>';
+      shPrint(dm + ' · HSTS ' + r(2) + ' · CSP ' + r(3) + ' · X-Frame-Options ' + r(5) + ' · Referrer-Policy ' + r(7) + ' <span class="t-dim">(concept demo)</span>');
+    } },
+    { c: 'dig', a: '<domain>', d: 'DNS lookup (demo — RFC 5737 range)', f: args => {
+      const t = (args[0] || '').toLowerCase();
+      if (!t) return shPrint('<span class="t-warn">usage: dig &lt;domain&gt;</span>');
+      shPrint(t + ' · A 203.0.113.' + (1 + (t.length * 7) % 250) + ' · TTL 300');
+    } },
+    { c: 'hash', a: '<text>', d: 'SHA-256 + SHA-1 (real webcrypto)', f: async args => {
+      const t = args.join(' ');
+      if (!t) return shPrint('<span class="t-warn">usage: hash &lt;text&gt;</span>');
+      shPrint('sha256  <span class="t-ok">' + await shaHex('SHA-256', t) + '</span>');
+      shPrint('sha1    <span class="t-dim">' + await shaHex('SHA-1', t) + '</span>');
+    } },
+    { c: 'b64', a: 'e|d <text>', d: 'base64 encode / decode', f: args => {
+      const m = (args.shift() || '').toLowerCase(); const t = args.join(' ');
+      if (!t || !['e', 'd'].includes(m)) return shPrint('<span class="t-warn">usage: b64 e|d &lt;text&gt;</span>');
+      shPrint(esc(m === 'e' ? btoa(t) : atob(t)));
+    } },
+    { c: 'jwt', a: '<token>', d: 'decode a JWT (never trusts the signature)', f: args => {
+      const r = jwtDecode(args.join(''));
+      shPrint('<span class="t-dim">header</span>  ' + esc(JSON.stringify(r.header)));
+      shPrint('<span class="t-dim">payload</span> ' + esc(JSON.stringify(r.payload)));
+      shPrint('<span class="t-warn">⚠ decoded, not verified</span>');
+    } },
+    { c: 'entropy', a: '<password>', d: 'password strength in bits (real math)', f: args => {
+      const t = args.join(' ');
+      if (!t) return shPrint('<span class="t-warn">usage: entropy &lt;password&gt;</span>');
+      const e = entropyOf(t);
+      shPrint('~' + e + ' bits — <span class="' + (e >= 80 ? 't-ok' : e >= 50 ? 't-warn' : 't-bad') + '">' + (e >= 80 ? 'strong' : e >= 50 ? 'okay — longer is better' : 'weak — use a passphrase or pwgen') + '</span>');
+    } },
+    { c: 'pwgen', a: '[length]', d: 'generate a random password (crypto rng)', f: args => {
+      const len = Math.min(Math.max(parseInt(args[0]) || 20, 8), 64);
+      const p = pwgen(len);
+      shPrint('<span class="t-ok">' + esc(p) + '</span> · ~' + entropyOf(p) + ' bits — generated locally, never sent anywhere');
+    } },
+    { c: 'uuid', a: '', d: 'generate a v4 uuid', f: () => shPrint('<span class="t-ok">' + (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); })) + '</span>') },
+    { c: 'feed', a: '', d: 'latest verified threat intel', f: () => {
+      shPrint('<span class="t-bad">CRIT</span> CVE-2026-1337 exploitation spike — mass scanning · 14m');
+      shPrint('<span class="t-warn">HIGH</span> HookLine v3 phishing kit abusing passkey resets · 42m');
+      shPrint('<span class="t-warn">HIGH</span> APT29 spearphishing wave vs cloud identity · 1h');
+    } },
+    { c: 'cases', a: '', d: 'list open casebooks', f: () => shPrint('3 open: <span class="t-warn">apt29-phishing-wave</span> (14 IOCs) · cve-2026-1337-audit (9) · internal-bec (filed by mailscope)') },
+    { c: 'mail', a: '', d: 'mailscope inbox stats', f: () => shPrint('mailscope 24h: <span class="t-bad">1 quarantined</span> · <span class="t-ok">38 verified</span> · 17 links → sandbox · 2 attachments detonated') },
+    { c: 'sandbox', a: 'ls|wipe', d: 'list or wipe isolated sessions', f: args => {
+      if ((args[0] || 'ls') === 'wipe') { shPrint('<span class="t-ok">✓ all sandbox sessions wiped — nothing persisted</span>'); notify('sandbox', 'wiped from scopeshell — nothing persisted', 'info', 'sandbox'); }
+      else shPrint('2 sessions: poc-cve-2026-1337 (wipes 41m) · mailscope-rewritten-link');
+    } },
+    { c: 'cloak', a: 'on|off', d: 'encrypted relay toggle', f: args => {
+      const m = (args[0] || '').toLowerCase();
+      setCloak(m === 'on' ? true : m === 'off' ? false : !cloaked);
+      shPrint(cloaked ? '<span class="t-ok">✓ cloaked — exit: reykjavik</span>' : '<span class="t-dim">direct connection</span>');
+    } },
+    { c: 'theme', a: '<name>', d: 'switch theme: ' + THEMES.map(t => t.id).join(' · '), f: args => {
+      const t = (args[0] || '').toLowerCase();
+      if (setTheme(t)) shPrint('<span class="t-ok">✓ theme: ' + t + '</span>');
+      else shPrint('<span class="t-warn">themes:</span> ' + THEMES.map(x => x.id + (x.id === currentTheme ? ' <span class="t-ok">(active)</span>' : '')).join(' · '));
+    } },
+    { c: 'save', a: '<url> [title]', d: 'save a link to the vault', f: args => {
+      const url = args.shift();
+      if (!url) return shPrint('<span class="t-warn">usage: save &lt;url&gt; [title]</span>');
+      const ok = vaultAdd(args.join(' ') || url, url);
+      shPrint(ok ? '<span class="t-ok">✓ saved to vault</span> — ' + esc(url) : '<span class="t-dim">already in vault</span>');
+    } },
+    { c: 'links', a: '', d: 'list saved vault links', f: () => {
+      shPrint(VAULT.length
+        ? VAULT.map((v, i) => '<span class="t-dim">' + (i + 1) + '</span>  ' + esc(v.title) + ' <span class="t-dim">· ' + esc(v.url) + '</span>').join('<br>')
+        : '<span class="t-dim">vault is empty — save &lt;url&gt; or bookmark a search result</span>');
+    } },
+    { c: 'courses', a: '', d: 'academy progress', f: () => shPrint('injection attacks 27% · email auth (SPF/DKIM/DMARC) 83% · memory corruption 8% · streak: 12 days') },
+    { c: 'notify', a: 'test', d: 'push a test notification', f: () => notify('scopeshell', 'test notification — the bell keeps the log', 'info') },
+    { c: 'neofetch', a: '', d: 'system info, terminal style', f: () => {
+      shPrint('<pre>   ╭─◯─╮    analyst@cipherscope\n ◯─┤ ◉ ├─◯  os: cipherscope concept 0.9\n   ╰─◯─╯    shell: scopeshell 1.0\n            index: verified-only · trust-scored\n            isolation: sandbox-by-default\n            trackers: 0 · telemetry: none</pre>');
+    } },
+    { c: 'whoami', a: '', d: 'who you are here', f: () => shPrint('analyst@cipherscope · isolated session · trackers 0') },
+    { c: 'history', a: '', d: 'command history (↑↓ to recall)', f: () => shPrint(shHist.length ? shHist.map((h, i) => '<span class="t-dim">' + (i + 1) + '</span>  ' + esc(h)).join('<br>') : '<span class="t-dim">empty</span>') },
+    { c: 'clear', a: '', d: 'clear the screen', f: () => { shellBody.innerHTML = ''; } },
+    { c: 'exit', a: '', d: 'close scopeshell', f: () => {
+      MINIWINS.scopeshell.classList.remove('open');
+      tbButtons('scopeshell').forEach(b => b.classList.remove('running'));
+    } }
+  ];
+  function shellHelp() {
+    shPrint('<span class="t-hd">SCOPESHELL COMMANDS — all ' + SHELL_CMDS.length + '</span>');
+    SHELL_CMDS.forEach(x =>
+      shPrint('<div class="cmd-row"><span class="cn">' + x.c + (x.a ? ' <span class="t-dim">' + esc(x.a) + '</span>' : '') + '</span><span class="cd">' + x.d + '</span></div>'));
+    shPrint('<span class="t-dim">↑↓ history · Tab completes · everything runs locally in the sandbox</span>');
+  }
+  let shellBooted = false;
+  function shellBoot() {
+    if (shellBooted) return;
+    shellBooted = true;
+    shPrint('<pre> ┌──────────────────────────────────┐\n │  scopeshell · cipherscope        │\n │  advanced terminal · v1.0        │\n └──────────────────────────────────┘</pre>');
+    shPrint('<span class="t-dim">sandboxed · no host access · concept demo</span>');
+    shellHelp();
+  }
+  const shHist = [];
+  let shIdx = -1;
+  shellInput.addEventListener('keydown', async e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const v = shellInput.value.trim().toLowerCase();
+      if (v) { const hit = SHELL_CMDS.find(x => x.c.startsWith(v)); if (hit) shellInput.value = hit.c + (hit.a ? ' ' : ''); }
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      if (shHist.length) { shIdx = Math.max(0, shIdx < 0 ? shHist.length - 1 : shIdx - 1); shellInput.value = shHist[shIdx]; }
+      e.preventDefault(); return;
+    }
+    if (e.key === 'ArrowDown') {
+      if (shIdx >= 0) { shIdx++; shellInput.value = shHist[shIdx] || ''; if (shIdx >= shHist.length) shIdx = -1; }
+      e.preventDefault(); return;
+    }
+    if (e.key !== 'Enter') return;
+    const raw = shellInput.value.trim();
+    shellInput.value = '';
+    if (!raw) return;
+    shHist.push(raw); shIdx = -1;
+    shPrint('<span class="t-ok">analyst@cipherscope:~$</span> ' + esc(raw));
+    const [cmd, ...args] = raw.split(/\s+/);
+    const hit = SHELL_CMDS.find(x => x.c === cmd.toLowerCase());
+    try {
+      if (hit) await hit.f(args);
+      else shPrint('<span class="t-bad">command not found:</span> ' + esc(cmd) + ' — type <span class="t-ok">help</span> for all ' + SHELL_CMDS.length + ' commands');
+    } catch (err) {
+      shPrint('<span class="t-bad">error:</span> ' + esc(String(err.message || err)));
+    }
+  });
+
   // Ctrl/Cmd+K focuses search
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); input.focus(); }
   });
+
+  // ---------- Restore saved theme + vault on load ----------
+  (async () => {
+    try {
+      const t = await store.get('cipherscope-theme');
+      if (t && THEMES.some(x => x.id === t)) setTheme(t);
+      const v = await store.get('cipherscope-vault');
+      if (Array.isArray(v)) VAULT = v;
+    } catch (e) { /* stay on defaults */ }
+  })();
 </script>
 </body>
 </html>
