@@ -1,1 +1,1 @@
-CipherScope modular project scaffold.
+CipherScope AI powered cybersecurity search engine.
