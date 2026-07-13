@@ -1,0 +1,1 @@
+export async function loadTaskbar(){const r=await fetch("components/taskbar.html");document.getElementById("taskbar-container").innerHTML=await r.text();}
