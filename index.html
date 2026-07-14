@@ -684,6 +684,185 @@
   .tg-sw.on::after { left: 17px; background: var(--teal); }
   .tg-sw:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
+  /* ============ ACADEMY HUB — full-screen learning experience ============ */
+  .academy-hub {
+    position: fixed; inset: 0; z-index: 70;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .academy-hub.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .ah-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .ah-bg::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 44px 44px; opacity: .14;
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black, transparent);
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black, transparent);
+  }
+  .ah-topbar {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 14px 22px; border-bottom: 1px solid var(--line);
+    background: rgba(10,14,20,.7); backdrop-filter: blur(10px); flex-shrink: 0;
+  }
+  .ah-brand { display: flex; align-items: center; gap: 9px; font-family: var(--display); font-size: 15px; font-weight: 600; }
+  .ah-brand .ic { width: 30px; height: 30px; border-radius: 8px; background: var(--teal-dim); border: 1px solid var(--teal-deep); display: grid; place-items: center; color: var(--teal); flex-shrink: 0; }
+  .ah-brand .ic svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+  .ah-brand small { display: block; font-family: var(--mono); font-size: 9.5px; color: var(--text-3); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; }
+  .ah-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 8px; }
+  .ah-tab {
+    font-family: var(--mono); font-size: 12px; color: var(--text-2);
+    background: none; border: 1px solid transparent; border-radius: 8px;
+    padding: 8px 13px; cursor: pointer; transition: all .13s ease;
+  }
+  .ah-tab:hover { color: var(--text); background: var(--panel-2); }
+  .ah-tab.active { color: var(--teal); background: var(--teal-dim); border-color: var(--teal-deep); }
+  .ah-stats { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .ah-stat { font-family: var(--mono); font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+  .ah-stat b { color: var(--teal); font-size: 13px; }
+  .ah-close {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel);
+    color: var(--text-2); cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
+    transition: all .13s ease;
+  }
+  .ah-close:hover { color: var(--text); border-color: var(--line-strong); }
+  .ah-close svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+  .ah-body { position: relative; z-index: 1; flex: 1; overflow-y: auto; }
+  .ah-wrap { max-width: 1080px; margin: 0 auto; padding: 34px 24px 90px; }
+
+  .ah-hero { text-align: center; margin-bottom: 34px; }
+  .ah-hero h1 { font-family: var(--display); font-size: clamp(24px,4vw,34px); font-weight: 600; letter-spacing: -.01em; }
+  .ah-hero h1 .accent { color: var(--teal); }
+  .ah-hero p { font-family: var(--mono); font-size: 12.5px; color: var(--text-3); margin-top: 9px; }
+
+  .ah-section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--text-3); margin: 30px 0 13px; display: flex; align-items: center; gap: 10px;
+  }
+  .ah-section-label:first-child { margin-top: 0; }
+  .ah-section-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .ah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px,1fr)); gap: 14px; }
+  .ah-card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 17px; cursor: pointer; transition: all .15s ease;
+    display: flex; flex-direction: column; gap: 10px; text-align: left;
+  }
+  .ah-card:hover { border-color: var(--teal-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+  .ah-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .ah-card-ic { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; }
+  .ah-card-ic svg { width: 19px; height: 19px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .ah-card-ic.beginner { background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal-deep); }
+  .ah-card-ic.intermediate { background: #33230A; color: #F7C87B; border: 1px solid #6B4A12; }
+  .ah-card-ic.advanced { background: #3A1114; color: #FF9599; border: 1px solid #6B1F26; }
+  .ah-card h3 { font-size: 14.5px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .ah-card .ah-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .ah-level {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .05em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 5px; flex-shrink: 0;
+  }
+  .ah-level.beginner { color: #7BE8C3; background: var(--teal-dim); }
+  .ah-level.intermediate { color: #F7C87B; background: #33230A; }
+  .ah-level.advanced { color: #FF9599; background: #3A1114; }
+  .ah-card-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); display: flex; gap: 12px; flex-wrap: wrap; }
+  .ah-pct { font-family: var(--mono); font-size: 10px; color: var(--text-3); display: flex; justify-content: space-between; }
+  .ah-core-tag { font-family: var(--mono); font-size: 9px; color: var(--teal); letter-spacing: .06em; }
+
+  .ah-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .ah-chip {
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-2); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 99px; padding: 7px 14px; cursor: pointer;
+    transition: all .13s ease;
+  }
+  .ah-chip:hover { color: var(--text); border-color: var(--line-strong); }
+  .ah-chip.active { color: var(--teal); border-color: var(--teal-deep); background: var(--teal-dim); }
+
+  .ah-back { font-family: var(--mono); font-size: 11.5px; color: var(--text-2); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-bottom: 18px; }
+  .ah-back:hover { color: var(--teal); }
+  .ah-back svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .ah-course-head { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 26px; flex-wrap: wrap; }
+  .ah-course-head h2 { font-family: var(--display); font-size: 22px; font-weight: 600; margin-top: 6px; }
+  .ah-course-head .ah-desc { font-size: 13px; margin-top: 6px; max-width: 560px; }
+  .ah-course-progress-ring { margin-left: auto; text-align: center; font-family: var(--mono); }
+  .ah-lesson {
+    display: flex; align-items: center; gap: 13px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; transition: border-color .13s ease;
+  }
+  .ah-lesson:hover { border-color: var(--line-strong); }
+  .ah-lesson.done { border-color: var(--teal-deep); }
+  .ah-lesson-check {
+    width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line-strong); flex-shrink: 0;
+    display: grid; place-items: center; color: transparent; transition: all .13s ease;
+  }
+  .ah-lesson.done .ah-lesson-check { background: var(--teal); border-color: var(--teal); color: var(--bg); }
+  .ah-lesson-check svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 3; fill: none; }
+  .ah-lesson-body { flex: 1; min-width: 0; }
+  .ah-lesson h4 { font-size: 13px; font-weight: 500; color: var(--text); }
+  .ah-lesson-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
+  .ah-lesson-type {
+    font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--text-3); border: 1px solid var(--line); border-radius: 5px; padding: 3px 7px; flex-shrink: 0;
+  }
+
+  .ah-article-card .tag {
+    font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--teal); margin-bottom: 2px; display: inline-block;
+  }
+  .ah-reader { max-width: 720px; margin: 0 auto; }
+  .ah-reader h1 { font-family: var(--display); font-size: 26px; font-weight: 600; line-height: 1.25; margin-top: 8px; }
+  .ah-reader .meta { font-family: var(--mono); font-size: 11px; color: var(--text-3); margin: 10px 0 26px; }
+  .ah-reader p { font-size: 14px; line-height: 1.75; color: var(--text-2); margin-bottom: 16px; }
+  .ah-reader h2 { font-size: 17px; font-weight: 600; color: var(--text); margin: 26px 0 10px; }
+
+  .ah-cert-status { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 24px; }
+  .ah-cert-reqs { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .ah-cert-req { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--text-2); font-family: var(--mono); }
+  .ah-cert-req .dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--line-strong); flex-shrink: 0; display: grid; place-items: center; }
+  .ah-cert-req.met .dot { background: var(--teal); border-color: var(--teal); color: var(--bg); }
+  .ah-cert-req.met { color: var(--text); }
+  .ah-cert-req .dot svg { width: 9px; height: 9px; stroke: currentColor; stroke-width: 3; fill: none; }
+  .ah-certificate {
+    border: 1px solid var(--teal-deep); border-radius: 16px; padding: 40px 36px;
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .ah-certificate::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--line-strong); border-radius: 10px; pointer-events: none; }
+  .ah-certificate .cert-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--teal); }
+  .ah-certificate h2 { font-family: var(--display); font-size: 28px; margin: 14px 0 4px; }
+  .ah-certificate .cert-name { font-family: var(--display); font-size: 22px; color: var(--teal); margin: 18px 0; }
+  .ah-certificate .cert-detail { font-family: var(--mono); font-size: 11px; color: var(--text-3); max-width: 420px; margin: 0 auto; line-height: 1.6; }
+  .ah-certificate .cert-id { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 22px; letter-spacing: .04em; }
+  .ah-name-input { max-width: 320px; margin: 0 auto 14px; }
+
+  .ah-quiz-q { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 17px; margin-bottom: 12px; }
+  .ah-quiz-q h4 { font-size: 13.5px; margin-bottom: 12px; font-weight: 500; }
+  .ah-quiz-opt {
+    display: block; width: 100%; text-align: left; font-family: var(--sans); font-size: 12.5px; color: var(--text-2);
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 13px; margin-bottom: 7px; cursor: pointer;
+    transition: all .13s ease;
+  }
+  .ah-quiz-opt:hover { border-color: var(--line-strong); }
+  .ah-quiz-opt.selected { border-color: var(--teal-deep); background: var(--teal-dim); color: var(--text); }
+  .ah-quiz-opt.correct { border-color: var(--teal); background: var(--teal-dim); color: var(--teal); }
+  .ah-quiz-opt.wrong { border-color: var(--red); background: #2A1214; color: #FF9599; }
+  .ah-quiz-opt[disabled] { cursor: default; }
+
+  @media print {
+    body.ah-printing > *:not(.academy-hub) { display: none !important; }
+    body.ah-printing .academy-hub { position: static; opacity: 1; }
+    body.ah-printing .ah-topbar, body.ah-printing .ah-hero { display: none !important; }
+    body.ah-printing .ah-body { overflow: visible; }
+    body.ah-printing .ah-wrap > *:not(.ah-certificate) { display: none !important; }
+    body.ah-printing .ah-certificate { margin: 60px auto; }
+  }
+  @media (max-width: 760px) {
+    .ah-stats { gap: 9px; }
+    .ah-stat span { display: none; }
+  }
+
   /* ---- Hero: the search engine ---- */
   .hero {
     display: flex; flex-direction: column; align-items: center;
@@ -1711,6 +1890,31 @@
   </div>
 </div>
 
+<!-- ============ ACADEMY HUB ============ -->
+<div class="academy-hub" id="academyHub" aria-hidden="true" role="dialog" aria-label="Cipherscope Academy">
+  <div class="ah-bg" aria-hidden="true"></div>
+  <div class="ah-topbar">
+    <div class="ah-brand">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg></span>
+      <div>cipherscope <span style="color:var(--teal)">academy</span><small>learn by doing</small></div>
+    </div>
+    <div class="ah-tabs" role="tablist">
+      <button class="ah-tab" data-ahnav="dashboard">dashboard</button>
+      <button class="ah-tab" data-ahnav="courses">courses</button>
+      <button class="ah-tab" data-ahnav="articles">articles</button>
+      <button class="ah-tab" data-ahnav="certification">certification</button>
+    </div>
+    <div class="ah-stats">
+      <div class="ah-stat" title="Modules completed"><b id="ah-stat-modules">0</b><span>modules</span></div>
+      <div class="ah-stat" title="Day streak"><b id="ah-stat-streak">0</b><span>day streak</span></div>
+      <button class="ah-close" id="ah-close" aria-label="Close academy"><svg viewBox="0 0 24 24"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg></button>
+    </div>
+  </div>
+  <div class="ah-body" id="ah-body">
+    <div class="ah-wrap" id="ah-main"></div>
+  </div>
+</div>
+
 <!-- ============ TASKBAR ============ -->
 <div class="taskbar" role="toolbar" aria-label="Cipherscope taskbar">
   <div class="tb-left">
@@ -2177,7 +2381,10 @@
   }
   document.getElementById('panel-close').addEventListener('click', closePanel);
   document.querySelectorAll('.rail-btn[data-panel]').forEach(btn =>
-    btn.addEventListener('click', () => openPanel(btn.dataset.panel)));
+    btn.addEventListener('click', () => {
+      if (btn.dataset.panel === 'academy') ahOpen('dashboard');
+      else openPanel(btn.dataset.panel);
+    }));
 
   // Home button
   document.querySelector('.rail-btn[data-action="home"]').addEventListener('click', () => {
@@ -2409,6 +2616,8 @@
       win.classList.remove('minimized', 'closed');
       restore.classList.remove('show');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (app === 'academy') {
+      ahOpen('dashboard');
     } else if (MINIWINS[app]) {
       toggleMiniwin(app);
     } else {
@@ -2419,7 +2628,7 @@
     b.addEventListener('click', () => launchApp(b.dataset.tb)));
 
   // Panel state reflects on taskbar app indicators
-  const panelApps = ['mail', 'casebooks', 'academy'];
+  const panelApps = ['mail', 'casebooks'];
   const _openPanel = openPanel, _closePanel = closePanel;
   openPanel = function (key) {
     _openPanel(key);
@@ -2429,6 +2638,583 @@
     _closePanel();
     panelApps.forEach(a => tbButtons(a).forEach(b => b.classList.remove('running')));
   };
+
+  // ================= ACADEMY HUB — full learning experience =================
+  const academyHub = document.getElementById('academyHub');
+  const ahBody = document.getElementById('ah-body');
+  const ahMain = document.getElementById('ah-main');
+
+  const ACADEMY_ICONS = {
+    network:  '<path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/><circle cx="12" cy="12" r="2.5"/>',
+    web:      '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6-4-9s1.5-6.3 4-9z"/>',
+    crypto:   '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    phishing: '<rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/>',
+    malware:  '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',
+    ir:       '<path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><polyline points="9 12 11 14 15 10"/>',
+    cloud:    '<path d="M7 18a4.5 4.5 0 0 1-.4-9 5.5 5.5 0 0 1 10.6-1.8A4.5 4.5 0 0 1 17 18H7z"/>',
+    grc:      '<path d="M5 4h11l3 3v13H5z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/>',
+    linux:    '<rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="9" x2="20" y2="9"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/>',
+    offsec:   '<path d="M12 2 2 7v6c0 5.2 3.8 9.4 10 11 6.2-1.6 10-5.8 10-11V7l-10-5z"/><line x1="9" y1="12" x2="15" y2="12"/>'
+  };
+
+  const ACADEMY_COURSES = [
+    {
+      id: 'netsec', subject: 'Network Security', icon: 'network', level: 'beginner', core: true,
+      title: 'Network Security Fundamentals',
+      desc: 'How data actually moves across a network — and every point along the way an attacker can intercept, spoof, or reroute it.',
+      modules: [
+        { t: 'The OSI model, from an attacker\u2019s view', d: '12 min', ty: 'video' },
+        { t: 'Firewalls, NAT & network segmentation', d: '18 min', ty: 'video' },
+        { t: 'Reading packets with Wireshark', d: '25 min', ty: 'lab' },
+        { t: 'ARP spoofing & man-in-the-middle attacks', d: '20 min', ty: 'video' },
+        { t: 'VPNs, tunnels & zero trust networking', d: '15 min', ty: 'video' },
+        { t: 'Module assessment', d: '8 min', ty: 'quiz' }
+      ]
+    },
+    {
+      id: 'websec', subject: 'Web Application Security', icon: 'web', level: 'beginner', core: true,
+      title: 'Web Application Security',
+      desc: 'The OWASP-style vulnerabilities behind almost every breach headline, and how to find and fix them.',
+      modules: [
+        { t: 'How the browser and server actually talk', d: '10 min', ty: 'video' },
+        { t: 'SQL injection, start to finish', d: '22 min', ty: 'lab' },
+        { t: 'Cross-site scripting (XSS): stored, reflected, DOM', d: '20 min', ty: 'video' },
+        { t: 'Broken authentication & session handling', d: '16 min', ty: 'video' },
+        { t: 'CSRF, SSRF & insecure deserialization', d: '19 min', ty: 'video' },
+        { t: 'Build a mini pentest report', d: '30 min', ty: 'lab' },
+        { t: 'Module assessment', d: '8 min', ty: 'quiz' }
+      ]
+    },
+    {
+      id: 'crypto', subject: 'Cryptography', icon: 'crypto', level: 'intermediate', core: true,
+      title: 'Cryptography Essentials',
+      desc: 'Symmetric vs asymmetric encryption, hashing, and how TLS quietly keeps the entire internet from being readable in plaintext.',
+      modules: [
+        { t: 'Symmetric vs asymmetric encryption', d: '14 min', ty: 'video' },
+        { t: 'Hashing, salting & why "encrypted passwords" is a myth', d: '17 min', ty: 'video' },
+        { t: 'Public key infrastructure & certificates', d: '18 min', ty: 'video' },
+        { t: 'Inside a TLS handshake', d: '15 min', ty: 'video' },
+        { t: 'Hands-on: hash and decode in the browser', d: '20 min', ty: 'lab' },
+        { t: 'Module assessment', d: '8 min', ty: 'quiz' }
+      ]
+    },
+    {
+      id: 'phishing', subject: 'Social Engineering', icon: 'phishing', level: 'beginner', core: true,
+      title: 'Social Engineering & Phishing Defense',
+      desc: 'Why humans, not firewalls, are still the easiest way into most organizations — and how to spot the tell.',
+      modules: [
+        { t: 'The psychology behind social engineering', d: '13 min', ty: 'video' },
+        { t: 'Anatomy of a phishing email', d: '15 min', ty: 'video' },
+        { t: 'Spear phishing, whaling & business email compromise', d: '16 min', ty: 'video' },
+        { t: 'SPF, DKIM & DMARC, explained simply', d: '18 min', ty: 'video' },
+        { t: 'Lab: spot the forged header', d: '15 min', ty: 'lab' },
+        { t: 'Module assessment', d: '8 min', ty: 'quiz' }
+      ]
+    },
+    {
+      id: 'malware', subject: 'Malware Analysis', icon: 'malware', level: 'intermediate',
+      title: 'Malware Analysis Basics',
+      desc: 'Static and dynamic analysis fundamentals for figuring out what a suspicious file actually does, safely.',
+      modules: [
+        { t: 'Static vs dynamic analysis', d: '14 min', ty: 'video' },
+        { t: 'Setting up a safe analysis sandbox', d: '17 min', ty: 'video' },
+        { t: 'Reading strings, imports & PE headers', d: '20 min', ty: 'lab' },
+        { t: 'Common persistence mechanisms', d: '16 min', ty: 'video' },
+        { t: 'Intro to YARA rules', d: '19 min', ty: 'lab' }
+      ]
+    },
+    {
+      id: 'ir', subject: 'Incident Response', icon: 'ir', level: 'intermediate',
+      title: 'Incident Response & Digital Forensics',
+      desc: 'The six-phase lifecycle real teams use to detect, contain, and recover from a breach without making it worse.',
+      modules: [
+        { t: 'The incident response lifecycle', d: '15 min', ty: 'video' },
+        { t: 'Triage & initial containment decisions', d: '18 min', ty: 'video' },
+        { t: 'Chain of custody & evidence handling', d: '14 min', ty: 'video' },
+        { t: 'Log analysis for timeline reconstruction', d: '22 min', ty: 'lab' },
+        { t: 'Writing the post-incident report', d: '16 min', ty: 'video' }
+      ]
+    },
+    {
+      id: 'cloud', subject: 'Cloud Security', icon: 'cloud', level: 'intermediate',
+      title: 'Cloud Security Foundations',
+      desc: 'The shared responsibility model, and why a single misconfigured storage bucket is still the most common cloud breach.',
+      modules: [
+        { t: 'The shared responsibility model', d: '12 min', ty: 'video' },
+        { t: 'IAM: roles, policies & least privilege', d: '18 min', ty: 'video' },
+        { t: 'Storage misconfigurations & public exposure', d: '15 min', ty: 'video' },
+        { t: 'Securing CI/CD pipelines & secrets', d: '17 min', ty: 'video' },
+        { t: 'Lab: audit a sample cloud config', d: '20 min', ty: 'lab' }
+      ]
+    },
+    {
+      id: 'grc', subject: 'Governance & Compliance', icon: 'grc', level: 'beginner',
+      title: 'Governance, Risk & Compliance',
+      desc: 'The frameworks (ISO 27001, NIST, SOC 2) that turn "we should probably be secure" into an auditable program.',
+      modules: [
+        { t: 'Why compliance and security aren\u2019t the same thing', d: '11 min', ty: 'video' },
+        { t: 'NIST CSF, ISO 27001 & SOC 2 at a glance', d: '19 min', ty: 'video' },
+        { t: 'Risk assessment & risk registers', d: '16 min', ty: 'video' },
+        { t: 'Writing a security policy that gets read', d: '14 min', ty: 'video' }
+      ]
+    },
+    {
+      id: 'linux', subject: 'Systems Hardening', icon: 'linux', level: 'beginner',
+      title: 'Linux & Systems Hardening',
+      desc: 'Locking down a server the way it should have been configured from day one — permissions, services, and patching.',
+      modules: [
+        { t: 'File permissions & the principle of least privilege', d: '14 min', ty: 'video' },
+        { t: 'Disabling unnecessary services', d: '12 min', ty: 'video' },
+        { t: 'SSH hardening & key-based auth', d: '15 min', ty: 'lab' },
+        { t: 'Patch management & CVE tracking', d: '13 min', ty: 'video' }
+      ]
+    },
+    {
+      id: 'offsec', subject: 'Ethical Hacking', icon: 'offsec', level: 'advanced',
+      title: 'Intro to Ethical Hacking',
+      desc: 'The offensive security mindset — reconnaissance, scanning, exploitation, and reporting, all within an authorized scope.',
+      modules: [
+        { t: 'Rules of engagement & authorized scope', d: '12 min', ty: 'video' },
+        { t: 'Reconnaissance & OSINT techniques', d: '20 min', ty: 'video' },
+        { t: 'Scanning & enumeration with nmap', d: '22 min', ty: 'lab' },
+        { t: 'Exploitation basics in a sandboxed range', d: '25 min', ty: 'lab' },
+        { t: 'Reporting findings that get fixed', d: '15 min', ty: 'video' }
+      ]
+    }
+  ];
+
+  const ACADEMY_ARTICLES = [
+    {
+      id: 'zero-trust', tag: 'Architecture', read: '4 min',
+      title: 'Zero Trust, explained without the buzzwords',
+      summary: 'The idea behind zero trust is simple: stop assuming anything inside the network is safe just because it\u2019s inside.',
+      body: [
+        'For decades, network security worked like a castle: a strong wall on the outside, and near-total trust for anything already inside it. The problem is that once an attacker gets past the wall — through a phished employee, a stolen credential, or a single unpatched laptop — they can move around almost freely.',
+        '## What zero trust actually changes',
+        'Zero trust removes the assumption that "inside the network" means "safe." Instead, every request for access is verified on its own terms: who is asking, from what device, under what conditions, and whether that access is actually needed right now.',
+        'In practice this looks like short-lived credentials instead of standing access, device health checks before granting a connection, and network segmentation so a compromised laptop in one department can\u2019t quietly reach payroll systems in another.',
+        '## Why it matters more every year',
+        'As more work happens across personal devices, cloud services, and remote connections, the old idea of a single defensible perimeter has mostly stopped making sense. Zero trust doesn\u2019t promise to stop every breach — nothing does — but it shrinks how far an attacker can get once they\u2019re in, which is often the difference between a contained incident and a front-page one.'
+      ]
+    },
+    {
+      id: 'phishing-2026', tag: 'Social Engineering', read: '5 min',
+      title: 'Why phishing still works, even in 2026',
+      summary: 'Spam filters have never been better, and phishing has never been more effective. Here\u2019s why both things are true at once.',
+      body: [
+        'It would be reasonable to assume phishing is a solved problem by now. Filters are smarter, awareness training is everywhere, and most people have seen dozens of examples. And yet phishing remains one of the most common ways organizations actually get breached.',
+        '## The attack evolved with the defense',
+        'As filters got better at catching obviously fake emails, attackers shifted toward messages that look almost identical to something the recipient already expects — an invoice from a known vendor, a shared document notification, a password reset that arrives right after a real one. The goal isn\u2019t to fool a filter anymore; it\u2019s to fool a person who is moving quickly and trusts the context.',
+        'Generative tools have also removed the old giveaways — awkward phrasing, obvious typos, generic greetings — that used to make phishing easy to spot at a glance.',
+        '## What actually helps',
+        'Training people to "spot the fake" only goes so far when the fake is convincing. The stronger defenses are structural: multi-factor authentication that survives a stolen password, email authentication standards like DKIM and DMARC that make spoofing harder, and a habit of verifying unusual requests through a second channel before acting on them.'
+      ]
+    },
+    {
+      id: 'zero-day', tag: 'Vulnerabilities', read: '4 min',
+      title: 'Understanding zero-day vulnerabilities',
+      summary: 'A "zero-day" isn\u2019t just a scary label — it describes a very specific and genuinely dangerous window in time.',
+      body: [
+        'A zero-day vulnerability is a flaw in software that the vendor doesn\u2019t yet know about, or hasn\u2019t yet patched. The name comes from the fact that defenders have had zero days to fix it before it can be exploited — because, as far as the outside world knows, it doesn\u2019t exist yet.',
+        '## From discovery to exploitation',
+        'Someone finds the flaw first — sometimes a researcher who reports it responsibly, sometimes an attacker who keeps it quiet. If it\u2019s the latter, that vulnerability can be used against real targets for weeks or months before a patch exists, because there\u2019s no signature or fix for defenders to rely on yet.',
+        'Once a zero-day becomes public or gets patched, it usually triggers a rush: attackers race to exploit unpatched systems before organizations catch up, which is why patch timelines matter so much in security operations.',
+        '## Why they\u2019re treated differently',
+        'Traditional defenses like antivirus signatures are built from known threats. A true zero-day, by definition, has no known signature yet — which is why layered defenses (network segmentation, least privilege, monitoring for unusual behavior rather than known malware) matter even when every system is fully patched.'
+      ]
+    },
+    {
+      id: 'ransomware', tag: 'Threats', read: '5 min',
+      title: 'How a ransomware attack actually unfolds',
+      summary: 'Ransomware rarely starts with encryption. By the time files are locked, the attacker has usually been inside for a while.',
+      body: [
+        'Ransomware headlines tend to focus on the moment files get encrypted, but that\u2019s typically the last step of a much longer intrusion, not the first.',
+        '## The typical stages',
+        'Initial access usually comes through phishing, a stolen credential, or an unpatched internet-facing service. From there, attackers spend time quietly exploring the network — identifying backups, valuable data, and administrative accounts — before deploying the actual ransomware.',
+        'Modern ransomware groups often steal data before encrypting anything, so even a organization with solid backups can still face pressure: pay, or have the stolen data leaked publicly. This "double extortion" model is now closer to the norm than the exception.',
+        '## Where the real defense happens',
+        'Because encryption is the last stage of a long attack, the most effective defenses focus on the earlier steps: catching unusual account behavior, limiting how far a compromised account can reach, and keeping backups offline and tested so recovery doesn\u2019t depend on paying anyone.'
+      ]
+    },
+    {
+      id: 'mfa', tag: 'Identity', read: '4 min',
+      title: 'Multi-factor authentication: what actually stops attackers',
+      summary: 'Not all MFA is created equal. Some methods block the vast majority of account takeovers; others barely help at all.',
+      body: [
+        'Multi-factor authentication (MFA) is often treated as a single checkbox — either an account has it or it doesn\u2019t — but the type of second factor matters enormously.',
+        '## The weaker end: SMS and email codes',
+        'One-time codes sent by text message are far better than a password alone, but they\u2019re vulnerable to SIM-swapping and interception, and attackers have gotten good at convincing tired, rushed users to simply hand a code over during a fake support call.',
+        '## The stronger end: authenticator apps and hardware keys',
+        'App-based authenticators tied to a device, and physical security keys using standards like FIDO2, are far harder to intercept remotely because there\u2019s no code to trick someone into reading aloud. Hardware keys in particular are resistant to most forms of phishing, since the cryptographic proof is tied to the actual website being visited, not just something the user types in.',
+        'The practical takeaway: any MFA is better than none, but where the option exists, an authenticator app or hardware key is worth the small extra setup effort — especially for accounts that would cause real damage if compromised.'
+      ]
+    },
+    {
+      id: 'pki-basics', tag: 'Cryptography', read: '4 min',
+      title: 'Public key cryptography, without the math headache',
+      summary: 'The padlock icon in a browser represents a genuinely elegant trick: proving identity and encrypting data without ever sharing a secret.',
+      body: [
+        'Public key cryptography solves a problem that seems almost impossible at first: how do two parties who\u2019ve never met agree on a secret, over a connection that anyone could be listening to?',
+        '## Two keys, one relationship',
+        'Every party has a key pair: a public key, which can be shared with literally anyone, and a private key, which never leaves their device. Anything encrypted with the public key can only be decrypted with the matching private key — so a message can be sent securely to someone without ever exchanging a shared secret in advance.',
+        'The reverse works too: signing something with a private key lets anyone verify it came from that party using the matching public key, which is the foundation of digital signatures and certificate trust.',
+        '## Where this shows up every day',
+        'This is the mechanism behind the padlock in a browser address bar. A website\u2019s certificate proves its public key genuinely belongs to that domain, and the brief handshake at connection time uses that key pair to safely agree on a shared session key — the one actually used to encrypt the traffic that follows.'
+      ]
+    },
+    {
+      id: 'soc-life', tag: 'Careers', read: '5 min',
+      title: 'Inside a SOC: what a security analyst actually does all day',
+      summary: 'Less like the movies, more like triage in an emergency room — constant alerts, most of them noise, a few of them very real.',
+      body: [
+        'A Security Operations Center (SOC) is the team responsible for continuously monitoring an organization\u2019s systems for signs of malicious activity, and responding when something looks wrong.',
+        '## Most of the day is triage',
+        'Modern environments generate an enormous volume of security alerts — most of them harmless: a login from a new location that turns out to be a business trip, a script that looks unusual but is actually an approved tool. A large part of an analyst\u2019s day is deciding, quickly, which alerts deserve a closer look.',
+        '## When something is real',
+        'When an alert turns out to be genuine, the job shifts fast: confirming what happened, containing it so it can\u2019t spread further, and working with other teams to remove the attacker\u2019s access. This is where the incident response lifecycle taught elsewhere in this academy gets used in practice rather than theory.',
+        '## Why the role keeps growing',
+        'As organizations generate more logs, more cloud services, and more potential entry points, the demand for people who can tell real threats apart from noise has grown right alongside it — which is part of why the field has far more open roles than trained analysts to fill them.'
+      ]
+    },
+    {
+      id: 'cloud-misconfig', tag: 'Cloud', read: '4 min',
+      title: 'Cloud misconfigurations: the quiet cause behind most cloud breaches',
+      summary: 'Cloud providers secure the infrastructure. Almost every major cloud breach happens one level up, in how it was configured.',
+      body: [
+        'Cloud platforms are, in most respects, extremely secure — the data centers, physical security, and underlying infrastructure are managed by teams whose entire job is keeping that layer locked down.',
+        '## The shared responsibility line',
+        'What the provider does not control is how a customer configures the services they use on top of that infrastructure. A storage bucket left publicly readable, an API key committed to a public code repository, or an overly broad access role are all customer-side decisions, not provider failures.',
+        '## Why this happens so often',
+        'Cloud environments make it fast to spin up new services, which is exactly the point — but that same speed makes it easy for a permission to be set too broadly "just to get something working," and never revisited. Multiply that across dozens of services and teams, and small oversights add up quickly.',
+        '## What reduces the risk',
+        'Regular configuration audits, automated scanning for public exposure, and applying least privilege by default rather than as an afterthought all address the same root cause: cloud security failures are usually a configuration problem, not an infrastructure one.'
+      ]
+    }
+  ];
+
+  const AH_EXAM = [
+    { q: 'Which of these is the best example of multi-factor authentication?', opts: ['A password plus a one-time code from an authenticator app', 'Two different passwords for the same account', 'A very long, complex password', 'A password hint question'], a: 0 },
+    { q: 'What does the principle of "least privilege" mean?', opts: ['Giving every user admin rights by default', 'Granting users only the access they need to do their job', 'Using the shortest possible password length', 'Disabling all user accounts after hours'], a: 1 },
+    { q: 'A phishing email that targets one specific, named individual is best described as:', opts: ['Vishing', 'Smishing', 'Spear phishing', 'Typosquatting'], a: 2 },
+    { q: 'What is the primary purpose of encrypting DNS queries (DNS over HTTPS)?', opts: ['Preventing eavesdropping on which sites are being looked up', 'Speeding up website loading times', 'Blocking all cookies', 'Replacing firewalls entirely'], a: 0 },
+    { q: 'In the CIA triad, what does the "I" stand for?', opts: ['Identity', 'Integrity', 'Isolation', 'Investigation'], a: 1 },
+    { q: 'Why is a zero-day vulnerability especially dangerous?', opts: ['It only affects old, unsupported software', 'No patch exists yet when it is first exploited', 'It always requires physical access to a device', 'It can only be triggered by the vendor'], a: 1 },
+    { q: 'Which practice best reduces the damage from a ransomware attack?', opts: ['Storing all backups on the same network drive as production data', 'Regular offline, tested backups combined with network segmentation', 'Disabling antivirus to improve system performance', 'Sharing one admin account across the whole team'], a: 1 },
+    { q: 'What does a SOC (Security Operations Center) analyst primarily do?', opts: ['Design marketing materials', 'Monitor, triage and respond to security alerts', 'Manage payroll systems', 'Negotiate vendor contracts'], a: 1 }
+  ];
+
+  let ahView = 'dashboard';
+  let ahCourseId = null;
+  let ahArticleId = null;
+  let ahSubjectFilter = 'all';
+  let AH_PROGRESS = {};
+  let AH_CERT = null;
+  let ahExamMode = false;
+  let ahQuizAnswers = {};
+  let ahQuizSubmitted = false;
+  let ahLastScore = 0;
+  let ahStreak = 0;
+
+  function ahDone(courseId) { return (AH_PROGRESS[courseId] || []).length; }
+  function ahTotalDone() { return ACADEMY_COURSES.reduce((s, c) => s + ahDone(c.id), 0); }
+  function ahSaveState() {
+    store.set('cipherscope-academy-progress', AH_PROGRESS);
+    store.set('cipherscope-academy-cert', AH_CERT);
+  }
+
+  function ahSetTaskbarState(active) {
+    tbButtons('academy').forEach(b => b.classList.toggle('running', active));
+    document.querySelectorAll('.rail-btn[data-panel="academy"]').forEach(b => b.classList.toggle('active', active));
+  }
+
+  async function ahBumpStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const rec = (await store.get('cipherscope-academy-streak')) || { last: null, streak: 0 };
+    if (rec.last !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      rec.streak = rec.last === yesterday ? rec.streak + 1 : 1;
+      rec.last = today;
+      await store.set('cipherscope-academy-streak', rec);
+    }
+    ahStreak = rec.streak;
+    ahUpdateStats();
+  }
+
+  function ahUpdateStats() {
+    const m = document.getElementById('ah-stat-modules');
+    const s = document.getElementById('ah-stat-streak');
+    if (m) m.textContent = ahTotalDone();
+    if (s) s.textContent = ahStreak;
+  }
+
+  function ahOpen(view, id) {
+    closePanel();
+    toggleStart(false);
+    academyHub.classList.add('open');
+    academyHub.setAttribute('aria-hidden', 'false');
+    ahSetTaskbarState(true);
+    ahBumpStreak();
+    ahNav(view || 'dashboard', id);
+  }
+  function ahClose() {
+    academyHub.classList.remove('open');
+    academyHub.setAttribute('aria-hidden', 'true');
+    ahSetTaskbarState(false);
+  }
+  document.getElementById('ah-close').addEventListener('click', ahClose);
+  document.querySelectorAll('.ah-tab').forEach(t => t.addEventListener('click', () => ahNav(t.dataset.ahnav)));
+
+  function ahNav(view, id) {
+    if (view === 'course') ahCourseId = id;
+    if (view === 'article') ahArticleId = id;
+    ahView = view;
+    ahExamMode = false;
+    const tabKey = view === 'course' ? 'courses' : view === 'article' ? 'articles' : view;
+    document.querySelectorAll('.ah-tab').forEach(t => t.classList.toggle('active', t.dataset.ahnav === tabKey));
+    ahRender();
+    ahBody.scrollTop = 0;
+  }
+
+  function ahCourseCardHTML(c) {
+    const done = ahDone(c.id), total = c.modules.length, pct = total ? Math.round(done / total * 100) : 0;
+    return `<button class="ah-card" data-course="${c.id}">
+      <div class="ah-card-top">
+        <div class="ah-card-ic ${c.level}"><svg viewBox="0 0 24 24">${ACADEMY_ICONS[c.icon]}</svg></div>
+        <span class="ah-level ${c.level}">${c.level}</span>
+      </div>
+      <h3>${esc(c.title)}</h3>
+      <p class="ah-desc">${esc(c.desc)}</p>
+      <div class="ah-card-meta"><span>${total} modules</span><span>${esc(c.subject)}</span>${c.core ? '<span class="ah-core-tag">\u2605 certification core</span>' : ''}</div>
+      <div class="progress"><i style="width:${pct}%"></i></div>
+      <div class="ah-pct"><span>${pct}% complete</span><span>${done}/${total}</span></div>
+    </button>`;
+  }
+
+  function ahArticleCardHTML(a) {
+    return `<button class="ah-card ah-article-card" data-article="${a.id}">
+      <span class="tag">${esc(a.tag)}</span>
+      <h3>${esc(a.title)}</h3>
+      <p class="ah-desc">${esc(a.summary)}</p>
+      <div class="ah-card-meta"><span>${a.read} read</span></div>
+    </button>`;
+  }
+
+  function ahRenderDashboard() {
+    const inProgress = ACADEMY_COURSES.filter(c => ahDone(c.id) > 0 && ahDone(c.id) < c.modules.length);
+    const coreCourses = ACADEMY_COURSES.filter(c => c.core);
+    return `
+      <div class="ah-hero">
+        <h1>Learn cybersecurity <span class="accent">by doing</span>.</h1>
+        <p>hands-on modules, real terminology, and a free level 1 certification \u2014 no signup wall.</p>
+      </div>
+      ${inProgress.length ? `<div class="ah-section-label">continue learning</div><div class="ah-grid">${inProgress.map(ahCourseCardHTML).join('')}</div>` : ''}
+      <div class="ah-section-label">certification core courses</div>
+      <div class="ah-grid">${coreCourses.map(ahCourseCardHTML).join('')}</div>
+      <div class="ah-section-label">from the library</div>
+      <div class="ah-grid">${ACADEMY_ARTICLES.slice(0, 3).map(ahArticleCardHTML).join('')}</div>`;
+  }
+
+  function ahRenderCourses() {
+    const subjects = ['all', ...new Set(ACADEMY_COURSES.map(c => c.subject))];
+    const filtered = ahSubjectFilter === 'all' ? ACADEMY_COURSES : ACADEMY_COURSES.filter(c => c.subject === ahSubjectFilter);
+    return `
+      <div class="ah-section-label">all courses</div>
+      <div class="ah-filters">${subjects.map(s => `<button class="ah-chip${s === ahSubjectFilter ? ' active' : ''}" data-ahsubj="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+      <div class="ah-grid">${filtered.map(ahCourseCardHTML).join('')}</div>`;
+  }
+
+  function ahRenderCourse() {
+    const c = ACADEMY_COURSES.find(x => x.id === ahCourseId);
+    if (!c) return '<p class="p-note">course not found.</p>';
+    const doneArr = AH_PROGRESS[c.id] || [];
+    const pct = Math.round(doneArr.length / c.modules.length * 100);
+    return `
+      <button class="ah-back" data-ahback="courses"><svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>back to courses</button>
+      <div class="ah-course-head">
+        <div class="ah-card-ic ${c.level}" style="width:56px;height:56px"><svg viewBox="0 0 24 24" style="width:27px;height:27px">${ACADEMY_ICONS[c.icon]}</svg></div>
+        <div>
+          <span class="ah-level ${c.level}">${c.level}</span>
+          <h2>${esc(c.title)}</h2>
+          <p class="ah-desc">${esc(c.desc)}</p>
+        </div>
+        <div class="ah-course-progress-ring"><div style="font-size:24px;color:var(--teal)">${pct}%</div><div style="font-size:10px;color:var(--text-3)">complete</div></div>
+      </div>
+      <div class="ah-section-label">modules</div>
+      ${c.modules.map((m, i) => `
+        <div class="ah-lesson${doneArr.includes(i) ? ' done' : ''}" data-ahlesson="${i}">
+          <div class="ah-lesson-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="ah-lesson-body"><h4>${i + 1}. ${esc(m.t)}</h4><div class="ah-lesson-meta">${m.d}</div></div>
+          <span class="ah-lesson-type">${m.ty}</span>
+        </div>`).join('')}
+      ${c.core ? '<p class="p-note" style="margin-top:14px">this course counts toward the cipherscope free level 1 certification.</p>' : ''}`;
+  }
+
+  function ahRenderArticles() {
+    return `<div class="ah-section-label">articles</div><div class="ah-grid">${ACADEMY_ARTICLES.map(ahArticleCardHTML).join('')}</div>`;
+  }
+  function ahRenderArticle() {
+    const a = ACADEMY_ARTICLES.find(x => x.id === ahArticleId);
+    if (!a) return '<p class="p-note">article not found.</p>';
+    return `
+      <button class="ah-back" data-ahback="articles"><svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>back to articles</button>
+      <div class="ah-reader">
+        <span class="tag">${esc(a.tag)}</span>
+        <h1>${esc(a.title)}</h1>
+        <div class="meta">${a.read} read</div>
+        ${a.body.map(p => p.startsWith('## ') ? `<h2>${esc(p.slice(3))}</h2>` : `<p>${esc(p)}</p>`).join('')}
+      </div>`;
+  }
+
+  function ahRenderCertification() {
+    if (AH_CERT) return ahRenderCertificateIssued();
+    if (ahExamMode) return ahRenderExam();
+    const core = ACADEMY_COURSES.filter(c => c.core);
+    const reqsMet = core.every(c => ahDone(c.id) === c.modules.length);
+    return `
+      <div class="ah-hero"><h1>cipherscope free <span class="accent">level 1</span> certification</h1><p>complete the four core courses, pass the final assessment, get your certificate \u2014 free, always.</p></div>
+      <div class="ah-cert-status">
+        <div class="ah-section-label" style="margin-top:0">requirements</div>
+        <div class="ah-cert-reqs">
+          ${core.map(c => {
+            const done = ahDone(c.id), total = c.modules.length, met = done === total;
+            return `<div class="ah-cert-req${met ? ' met' : ''}"><div class="dot">${met ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>${esc(c.title)} \u2014 ${done}/${total} modules</div>`;
+          }).join('')}
+        </div>
+        <button class="p-btn" style="margin-top:18px" id="ah-start-exam"${reqsMet ? '' : ' disabled'}>${reqsMet ? 'start final exam \u2192' : 'complete core courses to unlock'}</button>
+        ${!reqsMet ? `<button class="p-btn ghost" style="margin-top:18px;margin-left:8px" data-ahnav="courses">go to courses</button>` : ''}
+      </div>
+      <p class="p-note">the exam is 8 questions covering all four core courses. 75% (6/8) to pass. free retakes, no time limit.</p>`;
+  }
+
+  function ahRenderExam() {
+    const submitted = ahQuizSubmitted;
+    const score = ahLastScore;
+    const pass = score >= 6;
+    return `
+      <div class="ah-hero"><h1>final assessment</h1><p>${submitted ? (pass ? 'passed \u2014 nice work.' : 'not quite \u2014 review and try again.') : 'answer all 8 questions, then submit.'}</p></div>
+      ${submitted ? `<div class="ah-cert-status" style="text-align:center"><div style="font-size:30px;color:${pass ? 'var(--teal)' : 'var(--red)'};font-family:var(--display)">${score}/8</div><div class="p-sub">${pass ? 'passing score is 6/8 \u2014 you made it' : 'need 6/8 to pass'}</div></div>` : ''}
+      ${AH_EXAM.map((q, i) => `
+        <div class="ah-quiz-q">
+          <h4>${i + 1}. ${esc(q.q)}</h4>
+          ${q.opts.map((o, j) => {
+            let cls = 'ah-quiz-opt';
+            if (ahQuizAnswers[i] === j) cls += ' selected';
+            if (submitted && j === q.a) cls += ' correct';
+            if (submitted && ahQuizAnswers[i] === j && j !== q.a) cls += ' wrong';
+            return `<button class="${cls}" data-ahq="${i}" data-ahopt="${j}"${submitted ? ' disabled' : ''}>${esc(o)}</button>`;
+          }).join('')}
+        </div>`).join('')}
+      ${!submitted
+        ? `<button class="p-btn" id="ah-submit-exam" style="margin-top:6px">submit exam</button>
+           <button class="ah-back" style="margin-top:12px" id="ah-cancel-exam"><svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>cancel</button>`
+        : pass
+          ? `<div class="ah-name-input"><input class="p-input" id="ah-cert-name" placeholder="name for your certificate"></div><button class="p-btn" id="ah-issue-cert">generate certificate \u2192</button>`
+          : `<button class="p-btn" id="ah-retake-exam">try again</button>`}`;
+  }
+
+  function ahRenderCertificateIssued() {
+    const c = AH_CERT;
+    return `
+      <div class="ah-hero"><h1>your <span class="accent">certification</span></h1><p>issued ${c.date}</p></div>
+      <div class="ah-certificate">
+        <div class="cert-eyebrow">cipherscope academy</div>
+        <h2>certificate of completion</h2>
+        <div class="cert-detail">level 1 \u00b7 cybersecurity fundamentals</div>
+        <div class="cert-name">${esc(c.name)}</div>
+        <div class="cert-detail">has completed the core curriculum and passed the level 1 assessment with a score of ${c.score}/8</div>
+        <div class="cert-id">certificate id ${c.id} \u00b7 issued ${c.date}</div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:18px">
+        <button class="p-btn" id="ah-print-cert">print / save as pdf</button>
+        <button class="p-btn ghost" id="ah-reset-cert">retake exam</button>
+      </div>`;
+  }
+
+  function ahToggleLesson(courseId, idx) {
+    const arr = AH_PROGRESS[courseId] = AH_PROGRESS[courseId] || [];
+    const pos = arr.indexOf(idx);
+    if (pos >= 0) arr.splice(pos, 1); else arr.push(idx);
+    ahSaveState();
+    ahRender();
+  }
+
+  function ahSubmitExam() {
+    if (Object.keys(ahQuizAnswers).length < AH_EXAM.length) {
+      notify('academy', 'answer all questions before submitting the exam.', 'high');
+      return;
+    }
+    let score = 0;
+    AH_EXAM.forEach((q, i) => { if (ahQuizAnswers[i] === q.a) score++; });
+    ahQuizSubmitted = true;
+    ahLastScore = score;
+    ahRender();
+  }
+
+  function ahIssueCert() {
+    const nameInput = document.getElementById('ah-cert-name');
+    const name = (nameInput && nameInput.value.trim()) || 'cipherscope learner';
+    AH_CERT = { name, score: ahLastScore, id: 'CS-L1-' + Date.now().toString(36).toUpperCase().slice(-6), date: new Date().toISOString().slice(0, 10) };
+    ahSaveState();
+    ahExamMode = false;
+    ahRender();
+    notify('academy', 'certificate issued \u2014 congratulations!', 'ok', 'academy');
+  }
+
+  function ahResetCert() {
+    AH_CERT = null;
+    ahQuizSubmitted = false;
+    ahQuizAnswers = {};
+    ahLastScore = 0;
+    ahExamMode = true;
+    ahSaveState();
+    ahRender();
+  }
+
+  function ahRender() {
+    let html = '';
+    if (ahView === 'dashboard') html = ahRenderDashboard();
+    else if (ahView === 'courses') html = ahRenderCourses();
+    else if (ahView === 'course') html = ahRenderCourse();
+    else if (ahView === 'articles') html = ahRenderArticles();
+    else if (ahView === 'article') html = ahRenderArticle();
+    else if (ahView === 'certification') html = ahRenderCertification();
+    ahMain.innerHTML = html;
+    ahWire();
+    ahUpdateStats();
+  }
+
+  function ahWire() {
+    ahMain.querySelectorAll('[data-course]').forEach(el => el.addEventListener('click', () => ahNav('course', el.dataset.course)));
+    ahMain.querySelectorAll('[data-article]').forEach(el => el.addEventListener('click', () => ahNav('article', el.dataset.article)));
+    ahMain.querySelectorAll('[data-ahback]').forEach(el => el.addEventListener('click', () => ahNav(el.dataset.ahback)));
+    ahMain.querySelectorAll('[data-ahnav]').forEach(el => el.addEventListener('click', () => ahNav(el.dataset.ahnav)));
+    ahMain.querySelectorAll('[data-ahlesson]').forEach(el => el.addEventListener('click', () => ahToggleLesson(ahCourseId, +el.dataset.ahlesson)));
+    ahMain.querySelectorAll('[data-ahsubj]').forEach(el => el.addEventListener('click', () => { ahSubjectFilter = el.dataset.ahsubj; ahRender(); }));
+    ahMain.querySelectorAll('[data-ahq]').forEach(el => el.addEventListener('click', () => {
+      if (ahQuizSubmitted) return;
+      ahQuizAnswers[el.dataset.ahq] = +el.dataset.ahopt;
+      ahRender();
+    }));
+    const startExamBtn = document.getElementById('ah-start-exam');
+    if (startExamBtn && !startExamBtn.disabled) startExamBtn.addEventListener('click', () => { ahExamMode = true; ahQuizSubmitted = false; ahQuizAnswers = {}; ahRender(); });
+    document.getElementById('ah-submit-exam')?.addEventListener('click', ahSubmitExam);
+    document.getElementById('ah-cancel-exam')?.addEventListener('click', () => { ahExamMode = false; ahRender(); });
+    document.getElementById('ah-retake-exam')?.addEventListener('click', () => { ahQuizSubmitted = false; ahQuizAnswers = {}; ahRender(); });
+    document.getElementById('ah-issue-cert')?.addEventListener('click', ahIssueCert);
+    document.getElementById('ah-print-cert')?.addEventListener('click', () => { document.body.classList.add('ah-printing'); window.print(); });
+    document.getElementById('ah-reset-cert')?.addEventListener('click', ahResetCert);
+  }
+
+  window.addEventListener('afterprint', () => document.body.classList.remove('ah-printing'));
+
+  (async () => {
+    try {
+      const p = await store.get('cipherscope-academy-progress');
+      if (p && typeof p === 'object') AH_PROGRESS = p;
+      const c = await store.get('cipherscope-academy-cert');
+      if (c) AH_CERT = c;
+    } catch (e) { /* stay on defaults */ }
+  })();
 
   // ---------- Terminal app ----------
   const termBody = document.getElementById('term-body');
@@ -3058,7 +3844,7 @@
   document.addEventListener('keydown', e => {
     const typing = /INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
     if (e.key === '?' && !typing) { e.preventDefault(); toggleShortcuts(true); }
-    if (e.key === 'Escape') { toggleShortcuts(false); toggleWhatsNew(false); }
+    if (e.key === 'Escape') { toggleShortcuts(false); toggleWhatsNew(false); ahClose(); }
   });
 
   // ---------- Password lab ----------
